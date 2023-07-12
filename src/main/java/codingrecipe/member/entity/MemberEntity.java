@@ -23,12 +23,20 @@ public class MemberEntity {
     @Column
     private String memberName;
 
+    @Column
+    private String academyName;
+
+    @Column
+    private String phoneNumber;
+
     // memberDTO객체를 memberEntity로 바꾸는 함수를 만들어야 함
     public static MemberEntity toMemberEntity(MemberDTO memberDTO){
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setMemberName(memberDTO.getMemberName());
+        memberEntity.setPhoneNumber(memberDTO.getPhoneNumber());
+        memberEntity.setAcademyName(memberDTO.getAcademyName());
         return memberEntity;
     }
 }
