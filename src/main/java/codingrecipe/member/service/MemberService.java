@@ -35,8 +35,8 @@ public class MemberService {
                 // Entity의 password: 데이터베이스의 비밀번호
                 // DTO의 password: 입력받은 비밀번호
                 // entity -> DTO 변환후 리턴
-                MemberDTO dto = MemberDTO.toMemberDTO(memberEntity);
-                return dto;
+                MemberDTO memberDTO1 = MemberDTO.toMemberDTO(memberEntity);
+                return memberDTO1;
             }
             else {
                 // 비밀번호 불일치
