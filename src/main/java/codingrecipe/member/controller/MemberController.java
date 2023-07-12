@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor // lombok에서 제공
@@ -43,7 +42,7 @@ public class MemberController {
     @PostMapping("/member/login")
     public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
         MemberDTO loginResult = memberService.login(memberDTO);
-        if (loginResult != null){
+        if(loginResult != null){
             // login 성공
             session.setAttribute("loginEmail", loginResult.getMemberEmail());
             // 세션 기록
@@ -54,5 +53,6 @@ public class MemberController {
             return "login";
         }
     }
+
 
 }
