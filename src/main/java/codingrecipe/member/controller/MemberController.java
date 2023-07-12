@@ -2,6 +2,7 @@ package codingrecipe.member.controller;
 
 import codingrecipe.member.dto.MemberDTO;
 import codingrecipe.member.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,10 +37,22 @@ public class MemberController {
 
         return "login";
     }
+    @GetMapping("/member/login")
+    public String loginForm(){return "login";}
 
     @PostMapping("/member/login")
-    public String login(@ModelAttribute MemberDTO memberDTO) {
-
+    public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
+        MemberDTO loginResult = memberService.login(memberDTO);
+        if (loginResult != null){
+            // login 성공
+            session.setAttribute("loginEmail", loginResult.getMemberEmail());
+            // 세션 기록
+            return "main";
+        }
+        else {
+            // login 실패
+            return "login";
+        }
     }
 
 }
