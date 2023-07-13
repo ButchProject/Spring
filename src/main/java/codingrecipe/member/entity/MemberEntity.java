@@ -8,35 +8,34 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name = "member_table")
+@Table(name = "signup")
 public class MemberEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    private Long id;
-
-    @Column(unique = true) // unique 제약조건 추가
-    private String memberEmail;
-
+    @GeneratedValue
+    private Long personId;
     @Column
-    private String memberPassword;
-
+    private String academy;
     @Column
-    private String memberName;
-
+    private String email;
     @Column
-    private String academyName;
-
+    private String name;
+    @Column
+    private String password;
     @Column
     private String phoneNumber;
+
 
     // memberDTO객체를 memberEntity로 바꾸는 함수를 만들어야 함
     public static MemberEntity toMemberEntity(MemberDTO memberDTO){
         MemberEntity memberEntity = new MemberEntity();
-        memberEntity.setMemberEmail(memberDTO.getMemberEmail());
-        memberEntity.setMemberPassword(memberDTO.getMemberPassword());
-        memberEntity.setMemberName(memberDTO.getMemberName());
+
+        memberEntity.setAcademy(memberDTO.getAcademy());
+        memberEntity.setEmail(memberDTO.getEmail());
+        memberEntity.setName(memberDTO.getName());
+        memberEntity.setPassword(memberDTO.getPassword());
         memberEntity.setPhoneNumber(memberDTO.getPhoneNumber());
-        memberEntity.setAcademyName(memberDTO.getAcademyName());
+
+
         return memberEntity;
     }
 }
