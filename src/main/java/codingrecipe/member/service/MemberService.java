@@ -30,11 +30,11 @@ public class MemberService {
             2. DB에서 조회한 비밀번호와 사용자가 입력한 비밀번호가 일치하는지 판단
 
          */
-        Optional<MemberEntity> byMemberEmail = memberRepository.findByEmail(memberDTO.getEmail());
+        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(memberDTO.getMemberEmail());
         if (byMemberEmail.isPresent()) {
             // 조회 결과가 있다.(해당 이메일을 가진 회원 정보가 있다.)
             MemberEntity memberEntity = byMemberEmail.get();
-            if (memberEntity.getPassword().equals(memberDTO.getPassword())) {
+            if (memberEntity.getMemberPassword().equals(memberDTO.getMemberPassword())) {
                 // 비밀번호가 일치하는 경우
                 // Entity의 password: 데이터베이스의 비밀번호
                 // DTO의 password: 입력받은 비밀번호
