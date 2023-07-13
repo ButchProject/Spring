@@ -5,7 +5,11 @@ import codingrecipe.member.entity.MemberEntity;
 import codingrecipe.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
+import java.lang.reflect.Member;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,5 +51,32 @@ public class MemberService {
             // 조회 결과가 없다.(해당 이메일을 가진 회원이 없다.)
             return null;
         }
+    }
+
+    public List<MemberDTO> findAll(){
+        List<MemberEntity> memberEntityList = memberRepository.findAll();
+        // Repository와 관련된 것은 Entity 객체로 넘어온다.
+        // 우리는 Entity 객체를 DTO 객체로 넘겨줘야 함.
+        List<MemberDTO> memberDTOList = new ArrayList<>();
+
+        for (MemberEntity memberEntity : memberEntityList) {
+            memberDTOList.add(MemberDTO.toMemberDTO(memberEntity));
+
+        }
+        return memberDTOList;
+
+
+    }
+
+    public MemberDTO findById(Long id) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+        if (optionalMemberEntity.isPresent()) {
+            return MemberDTO.toMemberDTO(optionalMemberEntity.get());
+            // get 함수를 쓰면 optional로 감싸진 껍데기를 벗길 수 있다.
+        }
+        else {
+            return null;
+        }
+
     }
 }
