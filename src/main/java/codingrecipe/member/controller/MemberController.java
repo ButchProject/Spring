@@ -69,13 +69,14 @@ public class MemberController {
     }
 
     @GetMapping("/member/{id}")
-    public String findById(@PathVariable Long id, Model model){
+    public String findById(@PathVariable Long id, Model model) {
         // 경로상의 값을 가져올 때 @PathVariable을 많이 사용함.
         // id에 해당하는 객체를 DB에서 가져와서 화면에 뿌려야하기 때문에 Model 객체가 필요함.
         MemberDTO memberDTO = memberService.findById(id);
         model.addAttribute("member", memberDTO);
         return "detail";
     }
+
     @GetMapping("/member/update")
     public String updateForm(HttpSession session, Model model) {
         String myEmail = (String) session.getAttribute("loginEmail");
@@ -88,5 +89,12 @@ public class MemberController {
     public String update(@ModelAttribute MemberDTO memberDTO) {
         memberService.update(memberDTO);
         return "redirect:/member/" + memberDTO.getId();
+    }
+
+    @GetMapping("/member/delete/{id}")
+    public String deleteById(@PathVariable Long id) {
+        memberService.deleteById(id);
+        return "redirect:/member/";
+        // redirect 뒤에는 주소가 와야 함(html이름이 오면 안됨)
     }
 }
