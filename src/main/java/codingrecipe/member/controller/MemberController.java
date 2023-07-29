@@ -97,4 +97,12 @@ public class MemberController {
         return "redirect:/member/";
         // redirect 뒤에는 주소가 와야 함(html이름이 오면 안됨)
     }
+
+    @GetMapping("/member/logout")
+    public String logout(HttpSession session) {
+        // 세션을 무효화하고 처음으로 돌아감
+        // 실제로는 이런 방식의 로그아웃을 사용하지 않음.
+        session.invalidate();
+        return "index";
+    }
 }
