@@ -42,15 +42,6 @@ public class MemberController {
 
 
 
-    /*@GetMapping("/update")
-    public String updateForm(HttpSession session, Model model) {
-        String myEmail = (String) session.getAttribute("loginEmail");
-        MemberDTO memberDTO = memberService.updateForm(myEmail);
-        model.addAttribute("updateMember", memberDTO);
-        return "update";
-    }*/
-
-
 
 
     /*@GetMapping("/logout")

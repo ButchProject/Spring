@@ -33,7 +33,7 @@ public class AdminController {
     }
 
 
-    @GetMapping("/RegisterInfo/{id}")
+    @GetMapping("/registerInfo/{id}")
     public ResponseEntity<MemberDTO> findById(@PathVariable Long id) {
         // 뒤에 {id}위치에 쿼리 파라미터로 주면 한 명의 회원 정보만을 받을 수 있음
         MemberDTO memberDTO = memberService.findById(id);
@@ -43,7 +43,7 @@ public class AdminController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/RegisterInfo/{id}")
+    @DeleteMapping("/registerInfo/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         memberService.deleteById(id);
         return ResponseEntity.ok().build();
