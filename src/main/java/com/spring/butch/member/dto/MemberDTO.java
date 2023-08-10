@@ -1,6 +1,6 @@
-package codingrecipe.member.dto;
+package com.spring.butch.member.dto;
 
-import codingrecipe.member.entity.MemberEntity;
+import com.spring.butch.member.entity.MemberEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,9 +1,10 @@
-package codingrecipe.member.entity;
+package com.spring.butch.member.entity;
 
-import codingrecipe.member.dto.MemberDTO;
-import jakarta.persistence.*;
+import com.spring.butch.member.dto.MemberDTO;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 @Setter

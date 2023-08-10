@@ -1,9 +1,9 @@
-package codingrecipe.member.service;
+package com.spring.butch.member.service;
 
-import codingrecipe.member.dto.LoginDTO;
-import codingrecipe.member.dto.MemberDTO;
-import codingrecipe.member.entity.MemberEntity;
-import codingrecipe.member.repository.MemberRepository;
+import com.spring.butch.member.dto.LoginDTO;
+import com.spring.butch.member.dto.MemberDTO;
+import com.spring.butch.member.entity.MemberEntity;
+import com.spring.butch.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

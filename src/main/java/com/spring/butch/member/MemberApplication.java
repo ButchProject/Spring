@@ -1,4 +1,4 @@
-package codingrecipe.member;
+package com.spring.butch.member;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

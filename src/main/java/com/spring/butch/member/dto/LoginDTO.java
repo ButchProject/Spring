@@ -1,4 +1,4 @@
-package codingrecipe.member.dto;
+package com.spring.butch.member.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

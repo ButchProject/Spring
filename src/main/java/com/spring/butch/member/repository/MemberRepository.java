@@ -1,6 +1,6 @@
-package codingrecipe.member.repository;
+package com.spring.butch.member.repository;
 
-import codingrecipe.member.entity.MemberEntity;
+import com.spring.butch.member.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
