@@ -4,10 +4,7 @@ import com.spring.butch.member.service.MemberService;
 import com.spring.butch.member.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +14,7 @@ import java.util.List;
 public class AdminController {
     // 생성자 주입
     private final MemberService memberService;
-    @GetMapping("/registerInfo")
+    @GetMapping("/RegisterInfo")
     public ResponseEntity<List<MemberDTO>> findAll() {
         /**
          * /admin/registerInfo로 요청시 회원들의 데이터를 JSON방식으로 보냄
@@ -36,7 +33,7 @@ public class AdminController {
     }
 
 
-    @GetMapping("/registerInfo/{id}")
+    @GetMapping("/RegisterInfo/{id}")
     public ResponseEntity<MemberDTO> findById(@PathVariable Long id) {
         // 뒤에 {id}위치에 쿼리 파라미터로 주면 한 명의 회원 정보만을 받을 수 있음
         MemberDTO memberDTO = memberService.findById(id);
@@ -44,5 +41,10 @@ public class AdminController {
             return ResponseEntity.ok(memberDTO);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/RegisterInfo/{id}")
+    public void deleteById(@PathVariable Long id) {
+        memberService.deleteById(id);
     }
 }

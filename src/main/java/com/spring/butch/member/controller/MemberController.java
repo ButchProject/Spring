@@ -50,18 +50,8 @@ public class MemberController {
         return "update";
     }*/
 
-    @PostMapping("/update")
-    public String update(@ModelAttribute MemberDTO memberDTO) {
-        memberService.update(memberDTO);
-        return "redirect:/member/" + memberDTO.getId();
-    }
 
-    @GetMapping("/delete/{id}")
-    public String deleteById(@PathVariable Long id) {
-        memberService.deleteById(id);
-        return "redirect:/member/";
-        // redirect 뒤에는 주소가 와야 함(html이름이 오면 안됨)
-    }
+
 
     /*@GetMapping("/logout")
     public String logout(HttpSession session) {
