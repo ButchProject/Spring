@@ -1,5 +1,6 @@
 package codingrecipe.member.service;
 
+import codingrecipe.member.dto.LoginDTO;
 import codingrecipe.member.dto.MemberDTO;
 import codingrecipe.member.entity.MemberEntity;
 import codingrecipe.member.repository.MemberRepository;
@@ -24,17 +25,17 @@ public class MemberService {
         //repository의 save메서드 호출 (조건. entity객체를 넘겨줘야 함)
     }
 
-    public MemberDTO login(MemberDTO memberDTO) {
+    public MemberDTO login(LoginDTO loginDTO) {
         /*
             1. 회원이 입력한 이메일로 DB에서 조회
             2. DB에서 조회한 비밀번호와 사용자가 입력한 비밀번호가 일치하는지 판단
 
          */
-        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(memberDTO.getMemberEmail());
+        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(loginDTO.getMemberEmail());
         if (byMemberEmail.isPresent()) {
             // 조회 결과가 있다.(해당 이메일을 가진 회원 정보가 있다.)
             MemberEntity memberEntity = byMemberEmail.get();
-            if (memberEntity.getMemberPassword().equals(memberDTO.getMemberPassword())) {
+            if (memberEntity.getMemberPassword().equals(loginDTO.getMemberPassword())) {
                 // 비밀번호가 일치하는 경우
                 // Entity의 password: 데이터베이스의 비밀번호
                 // DTO의 password: 입력받은 비밀번호
@@ -44,6 +45,7 @@ public class MemberService {
             }
             else {
                 // 비밀번호 불일치
+                // 예외처리 해야함
                 return null;
             }
         }
