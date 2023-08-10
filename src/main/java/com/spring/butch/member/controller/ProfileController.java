@@ -3,6 +3,7 @@ package com.spring.butch.member.controller;
 import com.spring.butch.member.dto.MemberDTO;
 import com.spring.butch.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +16,9 @@ public class ProfileController {
 
     private final MemberService memberService;
     @PostMapping("/edit")
-    public void update(@ModelAttribute MemberDTO memberDTO) {
+    public ResponseEntity<Void> update(@ModelAttribute MemberDTO memberDTO) {
         memberService.update(memberDTO);
+        return ResponseEntity.ok().build();
     }
 
 }

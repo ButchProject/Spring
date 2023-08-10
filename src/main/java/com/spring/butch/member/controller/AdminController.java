@@ -44,7 +44,8 @@ public class AdminController {
     }
 
     @DeleteMapping("/RegisterInfo/{id}")
-    public void deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         memberService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
