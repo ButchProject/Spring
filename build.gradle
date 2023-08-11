@@ -35,7 +35,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-	implementation 'org.json:json:20210307'
+	implementation 'org.json:json:20230227'
 }
 
 tasks.named('test') {
