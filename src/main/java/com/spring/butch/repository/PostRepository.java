@@ -1,6 +1,6 @@
-package com.repository;
+package com.spring.butch.repository;
 
-import com.entity.PostEntity;
+import com.spring.butch.entity.PostEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

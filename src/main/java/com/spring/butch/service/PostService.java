@@ -1,14 +1,15 @@
-package com.service;
+package com.spring.butch.service;
 
 
-import com.dto.NodeDTO;
-import com.dto.PostDTO;
-import com.entity.NodeEntity;
-import com.entity.PostEntity;
-import com.repository.NodeRepository;
-import com.repository.PostRepository;
+import com.spring.butch.dto.NodeDTO;
+import com.spring.butch.dto.PostDTO;
+import com.spring.butch.entity.NodeEntity;
+import com.spring.butch.entity.PostEntity;
+import com.spring.butch.repository.NodeRepository;
+import com.spring.butch.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,7 @@ public class PostService {
         }
     }
 
+    @Transactional
     public void deletePostNode(Long id) {
         postRepository.deleteById(id);
         nodeRepository.deleteNodeEntities(id);

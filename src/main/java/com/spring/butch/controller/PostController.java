@@ -1,29 +1,16 @@
-package com.controller;
+package com.spring.butch.controller;
 
-import com.dto.NodeDTO;
-import com.dto.PostDTO;
-import com.service.PostService;
-import lombok.Getter;
+import com.spring.butch.dto.NodeDTO;
+import com.spring.butch.dto.PostDTO;
+import com.spring.butch.domain.PostNodeDomain;
+import com.spring.butch.service.PostService;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
-class PostNode {
-    private PostDTO postDTO;
-    private List<NodeDTO> nodeDTOList;
-
-    public PostNode(PostDTO postDTO, List<NodeDTO> nodeDTOList) {
-        this.postDTO = postDTO;
-        this.nodeDTOList = nodeDTOList;
-    }
-}
 
 
 @RestController
@@ -43,7 +30,7 @@ public class PostController {
     }
 
     @PostMapping("/post/write") //게시글 저장하기
-    public ResponseEntity<String> postSave(@RequestBody PostNode postNode){
+    public ResponseEntity<String> postSave(@RequestBody PostNodeDomain postNode){
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
 
@@ -56,18 +43,19 @@ public class PostController {
     }
 
     @GetMapping("/post/detail/{id}")// 게시글 상세보기
-    public ResponseEntity<PostNode> detailPost(@PathVariable Long id) {
+    public ResponseEntity<PostNodeDomain> detailPost(@PathVariable Long id) {
         PostDTO detailPost = postService.detailPost(id);
         List<NodeDTO> detailNode = postService.detailNode(id);
 
-        PostNode postDetailResponse = new PostNode(detailPost, detailNode);
+        PostNodeDomain postDetailResponse = new PostNodeDomain(detailPost, detailNode);
         return ResponseEntity.ok(postDetailResponse);
     }
 
     @PostMapping("/post/update/{id}")
-    public ResponseEntity<String> postUpdate(@RequestBody PostNode postNode) {
+    public ResponseEntity<String> postUpdate(@RequestBody PostNodeDomain postNode) {
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
+
         System.out.println("Postlist update");
         System.out.println("게시물 수정 : " + postDTO);
         System.out.println("정류장 수정 : " + nodeDTOList);

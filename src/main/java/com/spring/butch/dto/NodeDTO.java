@@ -1,6 +1,6 @@
-package com.dto;
+package com.spring.butch.dto;
 
-import com.entity.NodeEntity;
+import com.spring.butch.entity.NodeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
