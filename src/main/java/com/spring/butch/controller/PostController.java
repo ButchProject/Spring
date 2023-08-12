@@ -6,6 +6,7 @@ import com.spring.butch.domain.PostNodeDomain;
 import com.spring.butch.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -52,14 +53,14 @@ public class PostController {
     }
 
     @PostMapping("/post/update/{id}")
-    public ResponseEntity<String> postUpdate(@RequestBody PostNodeDomain postNode) {
+    public ResponseEntity<String> postUpdate(@PathVariable Long id, @RequestBody PostNodeDomain postNode) {
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
 
         System.out.println("Postlist update");
         System.out.println("게시물 수정 : " + postDTO);
         System.out.println("정류장 수정 : " + nodeDTOList);
-        postService.updatePostNode(postDTO, nodeDTOList);
+        postService.updatePostNode(id, postDTO, nodeDTOList);
 
         return ResponseEntity.ok("Post Update");
     }
