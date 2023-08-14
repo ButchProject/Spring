@@ -6,20 +6,19 @@ import com.spring.butch.domain.PostNodeDomain;
 import com.spring.butch.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-
 @RestController
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+
     @GetMapping("/post/list") // 게시글 데이터 전부 가져오기
-    public ResponseEntity<List<Object>> postNodeList(){
+    public ResponseEntity<List<Object>> postNodeList() {
         List<PostDTO> postDTOList = postService.postListAll();
         List<NodeDTO> nodeDTOList = postService.nodeListAll();
 
@@ -31,7 +30,7 @@ public class PostController {
     }
 
     @PostMapping("/post/write") //게시글 저장하기
-    public ResponseEntity<String> postSave(@RequestBody PostNodeDomain postNode){
+    public ResponseEntity<String> postSave(@RequestBody PostNodeDomain postNode) {
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
 
@@ -52,7 +51,7 @@ public class PostController {
         return ResponseEntity.ok(postDetailResponse);
     }
 
-    @PostMapping("/post/update/{id}")
+    @PostMapping("/post/update/{id}") // 게시글 수정하기
     public ResponseEntity<String> postUpdate(@PathVariable Long id, @RequestBody PostNodeDomain postNode) {
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
@@ -65,11 +64,19 @@ public class PostController {
         return ResponseEntity.ok("Post Update");
     }
 
-    @DeleteMapping("/post/delete/{id}")
+    @DeleteMapping("/post/delete/{id}") // 게시글 삭제하기
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
         postService.deletePostNode(id);
         return ResponseEntity.ok("Post Delete");
     }
+
+    @GetMapping("/post/list/sortByDesc") // 게시글 최신순으로 정렬하기
+    public ResponseEntity<List<PostDTO>> sortByDesc() {
+        List<PostDTO> postDTOList = postService.sortPostListByDecs();
+        return ResponseEntity.ok(postDTOList);
+    }
+    // 가져오는 데이터는 게시글 목록에 필요한 내용만 가져옴
+    // 제목, 상세지역, 전체 학생수, 현재 학생수
 
 }
 

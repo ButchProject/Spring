@@ -27,7 +27,7 @@ public class NodeEntity {
     @Column(nullable = false)
     private String nodeDetail; // 정류장 세부지역
     @Column(nullable = false)
-    private String nodeTime;
+    private String nodeTime; // 정류장 출발시간
 
     public static NodeEntity toNodeEntity(NodeDTO nodeDTO){
         NodeEntity nodeEntity = new NodeEntity();

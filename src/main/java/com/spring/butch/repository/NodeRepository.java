@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface NodeRepository extends JpaRepository<NodeEntity, Long> {
     @Query("SELECT n FROM NodeEntity n WHERE n.postId = :id")
-    List<NodeEntity> findSamePostId(@Param("id") Long id);
+    List<NodeEntity> findSamePostIdNode(@Param("id") Long id);
 
     @Modifying
     @Transactional

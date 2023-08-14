@@ -19,7 +19,7 @@ public class NodeDTO {
     private Double longtitude; // 경도
     private String nodeName; // 정류장 이름
     private String nodeDetail; // 정류장 세부지역
-    private String nodeTime; // 정류장 도착시간
+    private String nodeTime; // 정류장 출발시간
 
     public static NodeDTO toNodeDTO(NodeEntity nodeEntity){
         NodeDTO nodeDTO = new NodeDTO();
