@@ -3,10 +3,14 @@ package com.spring.butch.member.controller;
 import com.spring.butch.member.dto.LoginDTO;
 import com.spring.butch.member.service.MemberService;
 import com.spring.butch.member.dto.MemberDTO;
+import com.spring.butch.member.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     // 생성자 주입
     private final MemberService memberService;
+    private final SecurityService securityService;
 
     @PostMapping("/register")
     public ResponseEntity<MemberDTO> save(@RequestBody MemberDTO memberDTO) {
@@ -26,13 +31,16 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberDTO> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDTO loginDTO) {
         MemberDTO loginResult = memberService.login(loginDTO);
         if (loginResult != null) {
             // login 성공
-
+            String subject = loginDTO.getMemberEmail();
+            String token = securityService.createToken(subject, (2*1000*60)); // 2분으로 설정
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("result", token);
             // 성공 시 세션 처리 or 쿠키 처리 기능 추가 필요함.
-            return ResponseEntity.ok(loginResult);
+            return new ResponseEntity<>(map, HttpStatus.OK);
         } else {
             // login 실패
             // 예외처리 해야 함.

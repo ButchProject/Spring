@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor // lombok에서 제공
 public class ProfileController {
 
-    private final MemberService memberService;
-    @GetMapping("/{id}")
+    private final MemberService memberService;    @GetMapping("/{id}")
     public ResponseEntity<MemberDTO> findById(@PathVariable Long id) {
         // 뒤에 {id}위치에 쿼리 파라미터로 주면 한 명의 회원 정보만을 받을 수 있음
         MemberDTO memberDTO = memberService.findById(id);
