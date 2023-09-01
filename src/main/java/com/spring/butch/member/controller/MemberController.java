@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -36,9 +37,14 @@ public class MemberController {
         if (loginResult != null) {
             // login 성공
             String subject = loginDTO.getMemberEmail();
-            String token = securityService.createToken(subject, (2*1000*60)); // 2분으로 설정
+            String token = securityService.createToken(subject, (5*1000*60)); // 5분으로 설정
+
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("memberEmail", subject);
+
+
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("result", token);
+            map.put("token", token);
             // 성공 시 세션 처리 or 쿠키 처리 기능 추가 필요함.
             return new ResponseEntity<>(map, HttpStatus.OK);
         } else {
