@@ -22,11 +22,11 @@ public class NodeEntity {
     private Double latitude; // 위도
     @Column
     private Double longtitude; // 경도
-    @Column(nullable = false)
+    @Column
     private String nodeName; // 정류장 이름
-    @Column(nullable = false)
+    @Column
     private String nodeDetail; // 정류장 세부지역
-    @Column(nullable = false)
+    @Column
     private String nodeTime; // 정류장 출발시간
 
     public static NodeEntity toNodeEntity(NodeDTO nodeDTO){

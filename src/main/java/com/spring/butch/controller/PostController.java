@@ -70,11 +70,11 @@ public class PostController {
         return ResponseEntity.ok("Post Delete");
     }
 
-    @GetMapping("/post/list/sortByDesc") // 게시글 최신순으로 정렬하기
-    public ResponseEntity<List<PostDTO>> sortByDesc() {
-        List<PostDTO> postDTOList = postService.sortPostListByDecs();
-        return ResponseEntity.ok(postDTOList);
-    }
+//    @GetMapping("/post/list/sortByDesc") // 게시글 최신순으로 정렬하기
+//    public ResponseEntity<List<PostDTO>> sortByDesc() {
+//        List<PostDTO> postDTOList = postService.sortPostListByDecs();
+//        return ResponseEntity.ok(postDTOList);
+//    }
     // 가져오는 데이터는 게시글 목록에 필요한 내용만 가져옴
     // 제목, 상세지역, 전체 학생수, 현재 학생수
 

@@ -95,15 +95,15 @@ public class PostService {
     // 즉, postEntity에서는 데이터 행 하나만 삭제
     // nodeEntity에서는 여러 개의 행 삭제
 
-    public List<PostDTO> sortPostListByDecs(){ // 게시글 목록에서 최신순으로 정렬하기
-        List<PostEntity> postEntityList = postRepository.sortPostListByDesc();
-        List<PostDTO> postDTOList = new ArrayList<>();
-        for(PostEntity postEntity : postEntityList) {
-            PostDTO postDTO = PostDTO.toPostDTO(postEntity);
-            postDTOList.add(postDTO);
-        }
-
-        return postDTOList;
-    }
+//    public List<PostDTO> sortPostListByDecs(){ // 게시글 목록에서 최신순으로 정렬하기
+//        List<PostEntity> postEntityList = postRepository.sortPostListByDesc();
+//        List<PostDTO> postDTOList = new ArrayList<>();
+//        for(PostEntity postEntity : postEntityList) {
+//            PostDTO postDTO = PostDTO.toPostDTO(postEntity);
+//            postDTOList.add(postDTO);
+//        }
+//
+//        return postDTOList;
+//    }
 
 }

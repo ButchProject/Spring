@@ -11,8 +11,8 @@ import java.util.List;
 
 
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
-    @Query ("SELECT P FROM PostEntity p WHERE p.postWhere = :postWhere")
-    List<PostEntity> findSameWhere (@Param("postWhere") String postWhere);
+//    @Query ("SELECT P FROM PostEntity p WHERE p.postWhere = :postWhere")
+//    List<PostEntity> findSameWhere (@Param("postWhere") String postWhere);
 
     @Modifying
     @Transactional

@@ -37,6 +37,7 @@ public class PostDTO {
         postDTO.setPostMoney(postEntity.getPostMoney());
         postDTO.setPostSaleMoney(postEntity.getPostSaleMoney());
         postDTO.setPostDay(postEntity.getPostDay());
+        postDTO.setRecruitmentDone(postEntity.getRecruitmentDone());
 
         return postDTO;
     }
