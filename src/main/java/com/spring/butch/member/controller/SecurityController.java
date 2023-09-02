@@ -31,10 +31,10 @@ public class SecurityController {
 
         try {
             // JWT 라이브러리를 사용하여 토큰 파싱 및 검증
-            Claims claims = Jwts.parser().setSigningKey("kajjknkjqwerbasdflkqljwrjasdkfashkjdgfhgdslkaglefwauigvlbscjb").parseClaimsJws(token).getBody();
-
+            String memberEmail = securityService.getSubject(token);
+//            Claims claims = Jwts.parser().setSigningKey("kajjknkjqwerbasdflkqljwrjasdkfashkjdgfhgdslkaglefwauigvlbscjb").parseClaimsJws(token).getBody();
             // 추가적인 클레임 정보 확인 (옵션)
-            String memberEmail = claims.get("memberEmail", String.class);
+//            String memberEmail = claims.get("memberEmail", String.class);
 
             // 토큰이 유효한 경우
             Map<String, Object> response = new LinkedHashMap<>();
