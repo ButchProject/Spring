@@ -1,12 +1,8 @@
-package com.spring.butch.entity;
+package com.spring.butch.post.entity;
 
-import com.spring.butch.dto.PostDTO;
-import jdk.jfr.Unsigned;
-import lombok.Builder;
+import com.spring.butch.post.dto.PostDTO;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 

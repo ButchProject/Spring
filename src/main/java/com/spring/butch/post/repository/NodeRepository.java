@@ -1,7 +1,6 @@
-package com.spring.butch.repository;
+package com.spring.butch.post.repository;
 
-import com.spring.butch.entity.NodeEntity;
-import org.hibernate.sql.Update;
+import com.spring.butch.post.entity.NodeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

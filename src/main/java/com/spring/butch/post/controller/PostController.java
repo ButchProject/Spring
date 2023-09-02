@@ -1,9 +1,9 @@
-package com.spring.butch.controller;
+package com.spring.butch.post.controller;
 
-import com.spring.butch.dto.NodeDTO;
-import com.spring.butch.dto.PostDTO;
-import com.spring.butch.domain.PostNodeDomain;
-import com.spring.butch.service.PostService;
+import com.spring.butch.post.dto.NodeDTO;
+import com.spring.butch.post.dto.PostDTO;
+import com.spring.butch.post.domain.PostNodeDomain;
+import com.spring.butch.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

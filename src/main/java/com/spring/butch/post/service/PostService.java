@@ -1,12 +1,12 @@
-package com.spring.butch.service;
+package com.spring.butch.post.service;
 
 
-import com.spring.butch.dto.NodeDTO;
-import com.spring.butch.dto.PostDTO;
-import com.spring.butch.entity.NodeEntity;
-import com.spring.butch.entity.PostEntity;
-import com.spring.butch.repository.NodeRepository;
-import com.spring.butch.repository.PostRepository;
+import com.spring.butch.post.dto.NodeDTO;
+import com.spring.butch.post.dto.PostDTO;
+import com.spring.butch.post.entity.NodeEntity;
+import com.spring.butch.post.entity.PostEntity;
+import com.spring.butch.post.repository.NodeRepository;
+import com.spring.butch.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
