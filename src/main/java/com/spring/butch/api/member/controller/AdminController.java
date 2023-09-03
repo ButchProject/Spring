@@ -9,11 +9,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -23,7 +25,7 @@ public class AdminController {
     private final MemberService memberService;
     private final SecurityService securityService;
     @GetMapping("/RegisterInfo")
-    public ResponseEntity<List<MemberDTO>> findAll(@RequestHeader(value = "Authorization") String token) {
+    public ResponseEntity<List<MemberDTO>> findAll(@RequestBody Map<String, String> tokenMap) {
         /**
          * /admin/registerInfo로 요청시 회원들의 데이터를 JSON방식으로 보냄
          * ex)
@@ -37,12 +39,12 @@ public class AdminController {
          *     },
          */
         // "Bearer " 제거
-        String jwtToken = token.replace("Bearer ", "");
+        String token = tokenMap.get("token");
 
         // 토큰 유효성 검사 및 처리 로직
         try {
             // 1. JWT 라이브러리를 활용하여 토큰 파싱
-            Claims claims = Jwts.parser().setSigningKey("kajjknkjqwerbasdflkqljwrjasdkfashkjdgfhgdslkaglefwauigvlbscjb").parseClaimsJws(jwtToken).getBody();
+            Claims claims = Jwts.parser().setSigningKey("kajjknkjqwerbasdflkqljwrjasdkfashkjdgfhgdslkaglefwauigvlbscjb").parseClaimsJws(token).getBody();
 
             // 2. 서명 검증 (옵션)
             // ...
@@ -53,12 +55,14 @@ public class AdminController {
             if (now.after(expirationDate)) {
                 throw new TokenExpiredException("Token has expired");
             }
+            List<MemberDTO> memberDTOList = memberService.findAll();
+            return ResponseEntity.ok(memberDTOList);
 
         } catch (JwtException e) {
             throw new InvalidTokenException("Invalid token");
+
         }
-        List<MemberDTO> memberDTOList = memberService.findAll();
-        return ResponseEntity.ok(memberDTOList);
+
     }
 
 

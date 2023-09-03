@@ -15,19 +15,19 @@ public class MemberEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long id;
 
-    @Column(unique = true) // unique 제약조건 추가
+    @Column(unique = true, name = "member_email") // unique 제약조건 추가
     private String memberEmail;
 
-    @Column
+    @Column(name = "member_password")
     private String memberPassword;
 
-    @Column
+    @Column(name = "member_name")
     private String memberName;
 
-    @Column
+    @Column(name = "academy_name")
     private String academyName;
 
-    @Column
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     // memberDTO객체를 memberEntity로 바꾸는 함수를 만들어야 함
