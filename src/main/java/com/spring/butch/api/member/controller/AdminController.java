@@ -26,18 +26,7 @@ public class AdminController {
     private final SecurityService securityService;
     @GetMapping("/RegisterInfo")
     public ResponseEntity<List<MemberDTO>> findAll(@RequestBody Map<String, String> tokenMap) {
-        /**
-         * /admin/registerInfo로 요청시 회원들의 데이터를 JSON방식으로 보냄
-         * ex)
-         *      {
-         *         "id": 3,
-         *         "memberEmail": "kkm32543@khu.ac.kr",
-         *         "memberPassword": "1234",
-         *         "memberName": "김근민",
-         *         "phoneNumber": "01067295114",
-         *         "academyName": "김근민수학학원"
-         *     },
-         */
+
         // "Bearer " 제거
         String token = tokenMap.get("token");
 
