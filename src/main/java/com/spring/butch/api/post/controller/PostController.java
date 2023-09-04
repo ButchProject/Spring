@@ -1,35 +1,32 @@
 package com.spring.butch.api.post.controller;
 
-import com.spring.butch.api.post.service.PostService;
 import com.spring.butch.api.post.dto.NodeDTO;
 import com.spring.butch.api.post.dto.PostDTO;
+import com.spring.butch.api.post.service.PostService;
 import com.spring.butch.api.post.domain.PostNodeDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
 
-    @GetMapping("/post/list") // 게시글 데이터 전부 가져오기
-    public ResponseEntity<List<Object>> postNodeList() {
-        List<PostDTO> postDTOList = postService.postListAll();
-        List<NodeDTO> nodeDTOList = postService.nodeListAll();
+    @GetMapping("/Board")
+    public ResponseEntity<List<PostNodeDomain>> postNodeList() {
+        List<PostNodeDomain> postNodeListAll = postService.postNodeListAll();
 
-        List<Object> combinedList = new ArrayList<>();
-        combinedList.addAll(postDTOList);
-        combinedList.addAll(nodeDTOList);
-
-        return ResponseEntity.ok(combinedList);
+        return ResponseEntity.ok(postNodeListAll);
     }
 
-    @PostMapping("/post/write") //게시글 저장하기
+
+    @PostMapping("/writingBoard") //게시글 저장하기
     public ResponseEntity<String> postSave(@RequestBody PostNodeDomain postNode) {
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
@@ -42,7 +39,7 @@ public class PostController {
         return ResponseEntity.ok("Post Save");
     }
 
-    @GetMapping("/post/detail/{id}")// 게시글 상세보기
+    @GetMapping("/detailBoard/{id}")// 게시글 상세보기
     public ResponseEntity<PostNodeDomain> detailPost(@PathVariable Long id) {
         PostDTO detailPost = postService.detailPost(id);
         List<NodeDTO> detailNode = postService.detailNode(id);
@@ -51,7 +48,7 @@ public class PostController {
         return ResponseEntity.ok(postDetailResponse);
     }
 
-    @PostMapping("/post/update/{id}") // 게시글 수정하기
+    @PostMapping("/updateBoard/{id}") // 게시글 수정하기
     public ResponseEntity<String> postUpdate(@PathVariable Long id, @RequestBody PostNodeDomain postNode) {
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
@@ -64,7 +61,7 @@ public class PostController {
         return ResponseEntity.ok("Post Update");
     }
 
-    @DeleteMapping("/post/delete/{id}") // 게시글 삭제하기
+    @DeleteMapping("/deleteBoard/{id}") // 게시글 삭제하기
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
         postService.deletePostNode(id);
         return ResponseEntity.ok("Post Delete");
@@ -77,6 +74,7 @@ public class PostController {
 //    }
     // 가져오는 데이터는 게시글 목록에 필요한 내용만 가져옴
     // 제목, 상세지역, 전체 학생수, 현재 학생수
+    // 정렬해서 가져오기
 
 }
 

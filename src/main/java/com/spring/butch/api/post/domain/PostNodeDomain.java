@@ -1,7 +1,7 @@
 package com.spring.butch.api.post.domain;
 
-import com.spring.butch.api.post.dto.PostDTO;
 import com.spring.butch.api.post.dto.NodeDTO;
+import com.spring.butch.api.post.dto.PostDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

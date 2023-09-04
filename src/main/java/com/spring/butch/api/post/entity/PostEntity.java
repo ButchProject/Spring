@@ -37,6 +37,7 @@ public class PostEntity {
     // memberDTO객체를 memberEntity로 바꾸는 함수를 만들어야 함
     public static PostEntity toPostEntity(PostDTO postDTO){
         PostEntity postEntity = new PostEntity();
+
         postEntity.setPostTitle(postDTO.getPostTitle());
         postEntity.setPostWhere(postDTO.getPostWhere());
         postEntity.setPostDetail(postDTO.getPostDetail());

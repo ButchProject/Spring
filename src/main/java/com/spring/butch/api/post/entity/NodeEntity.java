@@ -15,7 +15,7 @@ public class NodeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long nodeId;
     @Column
-    private Long postId; // 게시물 아이디
+    private Long samePostId; // 게시물 아이디
     @Column
     private Long nodeNum; // 정류장 번호
     @Column
@@ -31,7 +31,8 @@ public class NodeEntity {
 
     public static NodeEntity toNodeEntity(NodeDTO nodeDTO){
         NodeEntity nodeEntity = new NodeEntity();
-        nodeEntity.setPostId(nodeDTO.getPostId());
+
+        nodeEntity.setSamePostId(nodeDTO.getSamePostId());
         nodeEntity.setNodeNum(nodeDTO.getNodeNum());
         nodeEntity.setLatitude(nodeDTO.getLatitude());
         nodeEntity.setLongtitude(nodeDTO.getLongtitude());

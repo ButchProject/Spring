@@ -11,9 +11,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class NodeDTO {
-    // 위도와 경도를 따로 저장해둔다.
     private Long nodeId;
-    private Long postId; // 게시물 아이디
+    private Long samePostId; // 게시물 아이디
     private Long nodeNum; // 정류장 번호
     private Double latitude; // 위도
     private Double longtitude; // 경도
@@ -23,8 +22,9 @@ public class NodeDTO {
 
     public static NodeDTO toNodeDTO(NodeEntity nodeEntity){
         NodeDTO nodeDTO = new NodeDTO();
+
         nodeDTO.setNodeId(nodeEntity.getNodeId());
-        nodeDTO.setPostId(nodeEntity.getPostId());
+        nodeDTO.setSamePostId(nodeEntity.getSamePostId());
         nodeDTO.setNodeNum(nodeEntity.getNodeNum());
         nodeDTO.setLatitude(nodeEntity.getLatitude());
         nodeDTO.setLongtitude(nodeEntity.getLongtitude());

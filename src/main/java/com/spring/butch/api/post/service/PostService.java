@@ -1,6 +1,7 @@
 package com.spring.butch.api.post.service;
 
 
+import com.spring.butch.api.post.domain.PostNodeDomain;
 import com.spring.butch.api.post.dto.NodeDTO;
 import com.spring.butch.api.post.dto.PostDTO;
 import com.spring.butch.api.post.entity.NodeEntity;
@@ -11,9 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,30 +25,59 @@ public class PostService {
         postRepository.save(postEntity);
         for (NodeDTO nodeDTO : nodeDTOList) {
             NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
+            nodeEntity.setSamePostId(postEntity.getPostId()); // samePostId와 postId를 연결함
             nodeRepository.save(nodeEntity);
         }
     }
 
-    public List<PostDTO> postListAll() { // 게시판 리스트 전부 가져오기
+    public List<PostNodeDomain> postNodeListAll() {
         List<PostEntity> postEntityList = postRepository.findAll();
-        List<PostDTO> postDTOList = new ArrayList<>();
-        for (PostEntity postEntity : postEntityList) {
-            postDTOList.add(PostDTO.toPostDTO(postEntity));
+        List<PostNodeDomain> listAll = new ArrayList<>();
+
+        if(postEntityList != null) {
+            for(PostEntity postEntity : postEntityList) {
+                PostDTO postDTO = PostDTO.toPostDTO(postEntity);
+                List<NodeDTO> nodeDTOList = new ArrayList<>();
+                List<NodeEntity> nodeEntities = nodeRepository.findSamePostIdNode(postEntity.getPostId());
+                for(NodeEntity nodeEntity : nodeEntities) {
+                    nodeDTOList.add(NodeDTO.toNodeDTO(nodeEntity));
+                }
+                PostNodeDomain postNodeDomain = new PostNodeDomain();
+
+                postNodeDomain.setPostDTO(postDTO);
+                postNodeDomain.setNodeDTOList(nodeDTOList);
+
+                listAll.add(postNodeDomain);
+            }
+            return listAll;
         }
-        return postDTOList;
+
+        else {
+            return null;
+        }
+
     }
 
-    public List<NodeDTO> nodeListAll() { // 정류장 리스트 전부 가져오기
-        List<NodeEntity> nodeEntityList = nodeRepository.findAll();
-        List<NodeDTO> nodeDTOList = new ArrayList<>();
-        for (NodeEntity nodeEntity : nodeEntityList) {
-            if (nodeEntity != null)
-                nodeDTOList.add(NodeDTO.toNodeDTO(nodeEntity));
-            else
-                return null;
-        }
-        return nodeDTOList;
-    } // Entity의 값이 null이면 빼고 있는 값들만 가져오도록 함.
+//    public List<PostDTO> postListAll() { // 게시판 리스트 전부 가져오기
+//        List<PostEntity> postEntityList = postRepository.findAll();
+//        List<PostDTO> postDTOList = new ArrayList<>();
+//        for (PostEntity postEntity : postEntityList) {
+//            postDTOList.add(PostDTO.toPostDTO(postEntity));
+//        }
+//        return postDTOList;
+//    }
+//
+//    public List<NodeDTO> nodeListAll() { // 정류장 리스트 전부 가져오기
+//        List<NodeEntity> nodeEntityList = nodeRepository.findAll();
+//        List<NodeDTO> nodeDTOList = new ArrayList<>();
+//        for (NodeEntity nodeEntity : nodeEntityList) {
+//            if (nodeEntity != null)
+//                nodeDTOList.add(NodeDTO.toNodeDTO(nodeEntity));
+//            else
+//                return null;
+//        }
+//        return nodeDTOList;
+//    } // Entity의 값이 null이면 빼고 있는 값들만 가져오도록 함.
 
     public PostDTO detailPost(Long id) { // 게시판 내용(정류장빼고) 상세보기
         Optional<PostEntity> owner = postRepository.findById(id);
@@ -95,15 +123,15 @@ public class PostService {
     // 즉, postEntity에서는 데이터 행 하나만 삭제
     // nodeEntity에서는 여러 개의 행 삭제
 
-//    public List<PostDTO> sortPostListByDecs(){ // 게시글 목록에서 최신순으로 정렬하기
-//        List<PostEntity> postEntityList = postRepository.sortPostListByDesc();
-//        List<PostDTO> postDTOList = new ArrayList<>();
-//        for(PostEntity postEntity : postEntityList) {
-//            PostDTO postDTO = PostDTO.toPostDTO(postEntity);
-//            postDTOList.add(postDTO);
-//        }
-//
-//        return postDTOList;
-//    }
+    public List<PostDTO> sortPostListByDecs(){ // 게시글 목록에서 최신순으로 정렬하기
+        List<PostEntity> postEntityList = postRepository.sortPostListByDesc();
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for(PostEntity postEntity : postEntityList) {
+            PostDTO postDTO = PostDTO.toPostDTO(postEntity);
+            postDTOList.add(postDTO);
+        }
+
+        return postDTOList;
+    }
 
 }

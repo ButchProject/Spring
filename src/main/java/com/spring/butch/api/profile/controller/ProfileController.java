@@ -32,6 +32,10 @@ public class ProfileController {
     }
     // 내 게시글 리스트 가져오기
 
+    // 내 게시글 수정하기
+    // 토큰 email이랑 db에 저장되어있는 이메일이랑 비교해서 되면 그 email에 해당되는 글 전부
+    // postentity 가져오기
+    //
 
 
 }
