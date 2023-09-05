@@ -3,6 +3,7 @@ package com.spring.butch.api.member.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -12,7 +13,9 @@ import java.util.Date;
 
 @Service
 public class SecurityService {
-    private static final String SECRET_KEY = "kajjknkjqwerbasdflkqljwrjasdkfashkjdgfhgdslkaglefwauigvlbscjb";
+
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
 
     public String createToken(String subject, long expTime){
         if(expTime < 0){
