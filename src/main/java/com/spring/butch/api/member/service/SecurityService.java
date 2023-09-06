@@ -1,21 +1,29 @@
 package com.spring.butch.api.member.service;
 
+import com.spring.butch.api.member.dto.MemberDTO;
+import com.spring.butch.api.member.exception.InvalidTokenException;
+import com.spring.butch.api.member.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SecurityService {
 
     @Value("${SECRET_KEY}")
     private String SECRET_KEY;
+    private MemberService memberService;
 
     public String createToken(String subject, long expTime){
         if(expTime < 0){
@@ -35,6 +43,28 @@ public class SecurityService {
                 .compact();
     }
 
+    public String resolveToken(HttpServletRequest req) {
+        String bearerToken = req.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7, bearerToken.length());
+        }
+        return null;
+    }
+
+    public Claims validateToken(String token) {
+        try {
+            Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+            Date expirationDate = claims.getExpiration();
+            Date now = new Date();
+            if (now.after(expirationDate)) {
+                throw new TokenExpiredException("Token has expired");
+            }
+
+            return claims;
+        } catch (JwtException e) {
+            throw new InvalidTokenException("Invalid token");
+        }
+    }
     // 보통 토큰 검증하는 매서드를 boolean 으로 만들어 사용한다.
     public String getSubject(String token){
         Claims claims = Jwts.parserBuilder()

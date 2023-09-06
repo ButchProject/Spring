@@ -9,10 +9,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,34 +26,15 @@ public class AdminController {
     // 생성자 주입
     private final MemberService memberService;
     private final SecurityService securityService;
+
     @GetMapping("/RegisterInfo")
-    public ResponseEntity<List<MemberDTO>> findAll(@RequestBody Map<String, String> tokenMap) {
-
+    public ResponseEntity<List<MemberDTO>> findAll(HttpServletRequest request) {
         // "Bearer " 제거
-        String token = tokenMap.get("token");
-
+        String token = securityService.resolveToken(request);
         // 토큰 유효성 검사 및 처리 로직
-        try {
-            // 1. JWT 라이브러리를 활용하여 토큰 파싱
-            Claims claims = Jwts.parser().setSigningKey("kajjknkjqwerbasdflkqljwrjasdkfashkjdgfhgdslkaglefwauigvlbscjb").parseClaimsJws(token).getBody();
-
-            // 2. 서명 검증 (옵션)
-            // ...
-
-            // 3. 만료 시간 확인
-            Date expirationDate = claims.getExpiration();
-            Date now = new Date();
-            if (now.after(expirationDate)) {
-                throw new TokenExpiredException("Token has expired");
-            }
-            List<MemberDTO> memberDTOList = memberService.findAll();
-            return ResponseEntity.ok(memberDTOList);
-
-        } catch (JwtException e) {
-            throw new InvalidTokenException("Invalid token");
-
-        }
-
+        Claims claims = securityService.validateToken(token);
+        List<MemberDTO> memberDTOList = memberService.findAll();
+        return ResponseEntity.ok(memberDTOList);
     }
 
 
