@@ -40,7 +40,7 @@ public class MemberController {
         if (loginResult != null) {
             // login 성공
             String subject = loginDTO.getMemberEmail();
-            String token = securityService.createToken(subject, (5*1000*60)); // 5분으로 설정
+            String token = securityService.createToken(subject, (60*1000*60)); // 1시간으로 설정
 
             Map<String, Object> claims = new HashMap<>();
             claims.put("memberEmail", subject);
