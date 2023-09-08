@@ -30,6 +30,9 @@ public class MemberEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "number_of_students")
+    private Long numberOfStudents;
+
     // memberDTO객체를 memberEntity로 바꾸는 함수를 만들어야 함
     public static MemberEntity toMemberEntity(MemberDTO memberDTO){
         MemberEntity memberEntity = new MemberEntity();
@@ -38,6 +41,7 @@ public class MemberEntity {
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setPhoneNumber(memberDTO.getPhoneNumber());
         memberEntity.setAcademyName(memberDTO.getAcademyName());
+        memberEntity.setNumberOfStudents(memberDTO.getNumberOfStudents());
         return memberEntity;
     }
 
@@ -49,6 +53,7 @@ public class MemberEntity {
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setPhoneNumber(memberDTO.getPhoneNumber());
         memberEntity.setAcademyName(memberDTO.getAcademyName());
+        memberEntity.setNumberOfStudents(memberDTO.getNumberOfStudents());
         return memberEntity;
     }
 }
