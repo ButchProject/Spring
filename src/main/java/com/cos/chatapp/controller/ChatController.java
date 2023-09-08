@@ -1,7 +1,11 @@
-package com.cos.chatapp;
+package com.cos.chatapp.controller;
 
+import com.cos.chatapp.Chat;
+import com.cos.chatapp.ChatRepository;
+import com.cos.chatapp.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,7 +19,6 @@ import java.time.LocalDateTime;
 @RestController
 public class ChatController {
     private final ChatRepository chatRepository;
-
 
 
     // 1:1 채팅에서 사용
@@ -38,5 +41,13 @@ public class ChatController {
     public Mono<Chat> setMsg(@RequestBody Chat chat){
         chat.setCreatedAt(LocalDateTime.now());
         return chatRepository.save(chat); // object를 리턴하면 자동으로 JSON으로 바꿔줌 (MessageConverter)
+    }
+
+    @CrossOrigin
+    @PostMapping("/chat/list")
+    public Flux<ChatRoom> getChatRoomsBySender(@RequestBody String sender) {
+        return chatRepository.findBySender(sender)
+                .map(chat -> new ChatRoom(chat.getSender(), chat.getRoomNum()))
+                .distinct();
     }
 }
