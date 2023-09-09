@@ -18,7 +18,8 @@ public class NodeDTO {
     private Double longtitude; // 경도
     private String nodeName; // 정류장 이름
     private String nodeDetail; // 정류장 세부지역
-    private String nodeTime; // 정류장 출발시간
+    private Integer nodeHour; // 정류장 시간
+    private Integer nodeMinute; // 정류장 분
 
     public static NodeDTO toNodeDTO(NodeEntity nodeEntity){
         NodeDTO nodeDTO = new NodeDTO();
@@ -30,7 +31,8 @@ public class NodeDTO {
         nodeDTO.setLongtitude(nodeEntity.getLongtitude());
         nodeDTO.setNodeName(nodeEntity.getNodeName());
         nodeDTO.setNodeDetail(nodeEntity.getNodeDetail());
-        nodeDTO.setNodeTime(nodeEntity.getNodeTime());
+        nodeDTO.setNodeHour(nodeEntity.getNodeHour());
+        nodeDTO.setNodeMinute(nodeEntity.getNodeMinute());
 
         return nodeDTO;
     }

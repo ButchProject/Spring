@@ -15,12 +15,14 @@ public class PostDTO {
     private String postTitle; // 게시글 제목
     private String postWhere; // 게시글 상세위치
     private String postDetail; // 게시글 내용
-    private Long postCapacityStudent; // 전체 학생수
-    private Long postCurrentStudent; // 현재 학생수
-    private Long postMoney; // 기존 금액
-    private Long postSaleMoney; // 할인 금액
-    private String postDay; // 요일
-    private Boolean recruitmentDone; // 모집완료
+    private Integer postBus45; // 45인승 버스
+    private Integer postBus25; // 25인승 버스
+    private Integer postBus12; // 12인승 버스
+    private Integer postCurrentStudent; // 현재 학생수
+
+    // Entity에 없는 내용
+    private Integer postBusSumMoney; // 대여버스 총합 금액
+    private Integer postBusSaleMoney; // 내가 가진 학생에 대한 금액
 
     public static PostDTO toPostDTO(PostEntity postEntity) {
         PostDTO postDTO = new PostDTO();
@@ -29,13 +31,20 @@ public class PostDTO {
         postDTO.setPostTitle(postEntity.getPostTitle());
         postDTO.setPostWhere(postEntity.getPostWhere());
         postDTO.setPostDetail(postEntity.getPostDetail());
-        postDTO.setPostCapacityStudent(postEntity.getPostCapacityStudent());
+        postDTO.setPostBus45(postEntity.getPostBus45());
+        postDTO.setPostBus25(postEntity.getPostBus25());
+        postDTO.setPostBus12(postDTO.getPostBus12());
         postDTO.setPostCurrentStudent(postEntity.getPostCurrentStudent());
-        postDTO.setPostMoney(postEntity.getPostMoney());
-        postDTO.setPostSaleMoney(postEntity.getPostSaleMoney());
-        postDTO.setPostDay(postEntity.getPostDay());
-        postDTO.setRecruitmentDone(postEntity.getRecruitmentDone());
 
         return postDTO;
     }
+
+    public void setPostBusSumMoney() {
+        this.postBusSumMoney = (getPostBus45() * 5000000) + (getPostBus25() * 3500000) + (getPostBus12() * 2400000);
+    }
+
+    public void setPostBusSaleMoney() {
+        this.postBusSaleMoney = getPostBusSumMoney() * ()
+    }
+
 }

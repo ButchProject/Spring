@@ -22,17 +22,14 @@ public class PostEntity {
     @Column
     private String postDetail; // 게시글 내용
     @Column
-    private Long postCapacityStudent; // 전체 학생수
+    private Integer postBus45; // 45인승 버스
     @Column
-    private Long postCurrentStudent; // 현재 학생수
+    private Integer postBus25; // 25인승 버스
     @Column
-    private Long postMoney; // 금액
+    private Integer postBus12; // 12인승 버스
     @Column
-    private Long postSaleMoney; // 할인금액
-    @Column
-    private String postDay; // 요일
-    @Column
-    private Boolean recruitmentDone; // 모집완료
+    private Integer postCurrentStudent; // 현재 학생수
+
 
     // memberDTO객체를 memberEntity로 바꾸는 함수를 만들어야 함
     public static PostEntity toPostEntity(PostDTO postDTO){
@@ -41,12 +38,11 @@ public class PostEntity {
         postEntity.setPostTitle(postDTO.getPostTitle());
         postEntity.setPostWhere(postDTO.getPostWhere());
         postEntity.setPostDetail(postDTO.getPostDetail());
-        postEntity.setPostCapacityStudent(postDTO.getPostCapacityStudent());
+        postEntity.setPostBus45(postDTO.getPostBus45());
+        postEntity.setPostBus25(postDTO.getPostBus25());
+        postEntity.setPostBus12(postDTO.getPostBus12());
         postEntity.setPostCurrentStudent(postDTO.getPostCurrentStudent());
-        postEntity.setPostMoney(postDTO.getPostMoney());
-        postEntity.setPostSaleMoney(postDTO.getPostSaleMoney());
-        postEntity.setPostDay(postDTO.getPostDay());
-        postEntity.setRecruitmentDone(postDTO.getRecruitmentDone());
+
 
         return postEntity;
     }

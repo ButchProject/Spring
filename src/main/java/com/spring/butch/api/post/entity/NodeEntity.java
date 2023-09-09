@@ -27,7 +27,9 @@ public class NodeEntity {
     @Column
     private String nodeDetail; // 정류장 세부지역
     @Column
-    private String nodeTime; // 정류장 출발시간
+    private Integer nodeHour; // 정류장 시간
+    @Column
+    private Integer nodeMinute; // 정류장 분
 
     public static NodeEntity toNodeEntity(NodeDTO nodeDTO){
         NodeEntity nodeEntity = new NodeEntity();
@@ -38,7 +40,8 @@ public class NodeEntity {
         nodeEntity.setLongtitude(nodeDTO.getLongtitude());
         nodeEntity.setNodeName(nodeDTO.getNodeName());
         nodeEntity.setNodeDetail(nodeDTO.getNodeDetail());
-        nodeEntity.setNodeTime(nodeDTO.getNodeTime());
+        nodeEntity.setNodeHour(nodeDTO.getNodeHour());
+        nodeEntity.setNodeMinute(nodeDTO.getNodeMinute());
 
         return nodeEntity;
     }
