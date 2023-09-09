@@ -31,7 +31,7 @@ public class MemberEntity {
     private String phoneNumber;
 
     @Column(name = "number_of_students")
-    private Long numberOfStudents;
+    private Integer numberOfStudents;
 
     // memberDTO객체를 memberEntity로 바꾸는 함수를 만들어야 함
     public static MemberEntity toMemberEntity(MemberDTO memberDTO){

@@ -79,14 +79,21 @@ public class MemberService {
         }
 
     }
-    public MemberDTO updateForm(String myEmail) {
-        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(myEmail);
+
+
+    public MemberDTO findByEmail(String memberEmail) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
         if (optionalMemberEntity.isPresent()) {
             return MemberDTO.toMemberDTO(optionalMemberEntity.get());
-        } else {
+            // get 함수를 쓰면 optional로 감싸진 껍데기를 벗길 수 있다.
+        }
+        else {
             return null;
         }
+
     }
+
+
 
     public void update(MemberDTO memberDTO) {
         memberRepository.save(MemberEntity.toUpdateMemberEntity(memberDTO));

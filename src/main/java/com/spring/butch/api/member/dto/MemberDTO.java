@@ -19,7 +19,7 @@ public class MemberDTO {
     private String memberName;
     private String phoneNumber;
     private String academyName;
-    private Long numberOfStudents;
+    private Integer numberOfStudents;
 
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();
@@ -29,7 +29,7 @@ public class MemberDTO {
         memberDTO.setMemberName(memberEntity.getMemberName());
         memberDTO.setPhoneNumber(memberEntity.getPhoneNumber());
         memberDTO.setAcademyName(memberEntity.getAcademyName());
-        memberDTO.setNumberOfStudents(memberDTO.getNumberOfStudents());
+        memberDTO.setNumberOfStudents(memberEntity.getNumberOfStudents());
         return memberDTO;
     }
 }

@@ -8,4 +8,5 @@ import lombok.Data;
 public class ChatRoom {
     private String sender;
     private String receiver;
+
 }

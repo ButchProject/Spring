@@ -19,4 +19,6 @@ public interface ChatRepository extends ReactiveMongoRepository<Chat, String> {
 
     @Query("{sender: ?0}")
     Flux<Chat> findBySender(String sender);
+
+    Flux<Chat> findByReceiver(String memberEmail);
 }

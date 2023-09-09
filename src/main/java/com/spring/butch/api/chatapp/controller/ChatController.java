@@ -2,7 +2,6 @@ package com.spring.butch.api.chatapp.controller;
 
 import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.repository.ChatRepository;
-import com.spring.butch.api.chatapp.dto.ChatRoom;
 import com.spring.butch.api.member.service.SecurityService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,8 @@ import reactor.core.scheduler.Schedulers;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -24,16 +25,20 @@ public class ChatController {
 
     @CrossOrigin
     @GetMapping("/chat/list")
-    public Flux<ChatRoom> getChatRoomsBySender(HttpServletRequest request) {
+    public Flux<Map<String, Integer>> getChatRoomNumbersByUser(HttpServletRequest request) {
         // 채팅 목록 보기
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token);
 
-        String senderEmail = securityService.getSubject(token);
+        String memberEmail = securityService.getSubject(token);
 
-        return chatRepository.findBySender(senderEmail)
-                .map(chat -> new ChatRoom(chat.getSender(), chat.getReceiver()))
-                .distinct();
+        Flux<Chat> senderChats = chatRepository.findBySender(memberEmail);
+        Flux<Chat> receiverChats = chatRepository.findByReceiver(memberEmail);
+
+        return Flux.merge(senderChats, receiverChats)
+                .map(Chat::getRoomNum)
+                .distinct()
+                .map(roomNumber -> Collections.singletonMap("roomNumber", roomNumber));
     }
 
 
