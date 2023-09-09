@@ -1,6 +1,8 @@
 package com.spring.butch.api.post.service;
 
 
+import com.spring.butch.api.member.entity.MemberEntity;
+import com.spring.butch.api.member.repository.MemberRepository;
 import com.spring.butch.api.post.domain.PostNodeDomain;
 import com.spring.butch.api.post.dto.NodeDTO;
 import com.spring.butch.api.post.dto.PostDTO;
@@ -19,6 +21,7 @@ import java.util.*;
 public class PostService {
     private final PostRepository postRepository;
     private final NodeRepository nodeRepository;
+    private final MemberRepository memberRepository;
 
     public void postSave(PostDTO postDTO, List<NodeDTO> nodeDTOList) { // 게시글 저장
         PostEntity postEntity = PostEntity.toPostEntity(postDTO);
@@ -30,8 +33,8 @@ public class PostService {
         }
     }
 
-    public List<PostNodeDomain> postNodeListAll() {
-        List<PostEntity> postEntityList = postRepository.findAll();
+    public List<PostNodeDomain> postNodeListAll() { // 게시글 리스트 전부 가져오기(최신순으로)
+        List<PostEntity> postEntityList = postRepository.sortPostListByDesc(); // 최신순으로 게시글 db가져오기
         List<PostNodeDomain> listAll = new ArrayList<>();
 
         if(postEntityList != null) {
@@ -39,6 +42,8 @@ public class PostService {
                 PostDTO postDTO = PostDTO.toPostDTO(postEntity);
                 List<NodeDTO> nodeDTOList = new ArrayList<>();
                 List<NodeEntity> nodeEntities = nodeRepository.findSamePostIdNode(postEntity.getPostId());
+                // 게시글에 대한 정류장 뽑아서 가져와주기
+
                 for(NodeEntity nodeEntity : nodeEntities) {
                     nodeDTOList.add(NodeDTO.toNodeDTO(nodeEntity));
                 }
@@ -79,10 +84,15 @@ public class PostService {
 //        return nodeDTOList;
 //    } // Entity의 값이 null이면 빼고 있는 값들만 가져오도록 함.
 
-    public PostDTO detailPost(Long id) { // 게시판 내용(정류장빼고) 상세보기
+    public PostDTO detailPost(Long id, String email) { // 게시판 내용(정류장빼고) 상세보기
         Optional<PostEntity> owner = postRepository.findById(id);
+        Optional<MemberEntity> memberinformaiton = memberRepository.findByMemberEmail(email);
+        Integer students = memberinformaiton.get().getNumberOfStudents();
+
         if (owner.isPresent()) {
-            return PostDTO.toPostDTO(owner.get());
+            PostDTO postDTO = PostDTO.toPostDTO(owner.get());
+            postDTO.setPostBusSaleMoney(students);
+            return postDTO;
         } else
             return null;
     }
@@ -103,9 +113,8 @@ public class PostService {
     public void updatePostNode(Long id, PostDTO postDTO, List<NodeDTO> nodeDTOList) { // 수정한 게시판 내용 저장하기.
         PostEntity postEntity = PostEntity.toPostEntity(postDTO);
         postRepository.updatePostEntitiy(id, postEntity.getPostTitle(),
-                postEntity.getPostWhere(), postEntity.getPostDetail(), postEntity.getPostCapacityStudent(),
-                postEntity.getPostCurrentStudent(), postEntity.getPostMoney(),
-                postEntity.getPostSaleMoney(), postEntity.getPostDay());
+                postEntity.getPostWhere(), postEntity.getPostDetail(), postEntity.getPostBus45(),
+                postEntity.getPostBus25(), postEntity.getPostBus12(), postEntity.getPostCurrentStudent());
         nodeRepository.deleteNodeEntities(id);
         for (NodeDTO nodeDTO : nodeDTOList) {
             NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
@@ -123,15 +132,6 @@ public class PostService {
     // 즉, postEntity에서는 데이터 행 하나만 삭제
     // nodeEntity에서는 여러 개의 행 삭제
 
-    public List<PostDTO> sortPostListByDecs(){ // 게시글 목록에서 최신순으로 정렬하기
-        List<PostEntity> postEntityList = postRepository.sortPostListByDesc();
-        List<PostDTO> postDTOList = new ArrayList<>();
-        for(PostEntity postEntity : postEntityList) {
-            PostDTO postDTO = PostDTO.toPostDTO(postEntity);
-            postDTOList.add(postDTO);
-        }
 
-        return postDTOList;
-    }
 
 }

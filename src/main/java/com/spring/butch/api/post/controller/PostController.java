@@ -1,13 +1,16 @@
 package com.spring.butch.api.post.controller;
 
+import com.spring.butch.api.member.service.SecurityService;
 import com.spring.butch.api.post.dto.NodeDTO;
 import com.spring.butch.api.post.dto.PostDTO;
 import com.spring.butch.api.post.service.PostService;
 import com.spring.butch.api.post.domain.PostNodeDomain;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +20,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final SecurityService securityService;
 
     @GetMapping("/Board")
-    public ResponseEntity<List<PostNodeDomain>> postNodeList() {
+    public ResponseEntity<List<PostNodeDomain>> postNodeList(HttpServletRequest request) {
+        // "Bearer " 제거
+        String token = securityService.resolveToken(request);
+        // 토큰 유효성 검사 및 처리 로직
+        Claims claims = securityService.validateToken(token);
+
         List<PostNodeDomain> postNodeListAll = postService.postNodeListAll();
 
         return ResponseEntity.ok(postNodeListAll);
@@ -27,7 +36,12 @@ public class PostController {
 
 
     @PostMapping("/writingBoard") //게시글 저장하기
-    public ResponseEntity<String> postSave(@RequestBody PostNodeDomain postNode) {
+    public ResponseEntity<String> postSave(@RequestBody PostNodeDomain postNode, HttpServletRequest request) {
+        // "Bearer " 제거
+        String token = securityService.resolveToken(request);
+        // 토큰 유효성 검사 및 처리 로직
+        Claims claims = securityService.validateToken(token);
+
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
 
@@ -40,8 +54,14 @@ public class PostController {
     }
 
     @GetMapping("/detailBoard/{id}")// 게시글 상세보기
-    public ResponseEntity<PostNodeDomain> detailPost(@PathVariable Long id) {
-        PostDTO detailPost = postService.detailPost(id);
+    public ResponseEntity<PostNodeDomain> detailPost(@PathVariable Long id, HttpServletRequest request) {
+        // "Bearer " 제거
+        String token = securityService.resolveToken(request);
+        // 토큰 유효성 검사 및 처리 로직
+        Claims claims = securityService.validateToken(token);
+        String email = claims.getSubject();
+
+        PostDTO detailPost = postService.detailPost(id, email);
         List<NodeDTO> detailNode = postService.detailNode(id);
 
         PostNodeDomain postDetailResponse = new PostNodeDomain(detailPost, detailNode);
@@ -49,7 +69,12 @@ public class PostController {
     }
 
     @PostMapping("/updateBoard/{id}") // 게시글 수정하기
-    public ResponseEntity<String> postUpdate(@PathVariable Long id, @RequestBody PostNodeDomain postNode) {
+    public ResponseEntity<String> postUpdate(@PathVariable Long id, @RequestBody PostNodeDomain postNode, HttpServletRequest request) {
+        // "Bearer " 제거
+        String token = securityService.resolveToken(request);
+        // 토큰 유효성 검사 및 처리 로직
+        Claims claims = securityService.validateToken(token);
+
         PostDTO postDTO = postNode.getPostDTO();
         List<NodeDTO> nodeDTOList = postNode.getNodeDTOList();
 
@@ -62,7 +87,12 @@ public class PostController {
     }
 
     @DeleteMapping("/deleteBoard/{id}") // 게시글 삭제하기
-    public ResponseEntity<String> deletePost(@PathVariable Long id) {
+    public ResponseEntity<String> deletePost(@PathVariable Long id, HttpServletRequest request) {
+        // "Bearer " 제거
+        String token = securityService.resolveToken(request);
+        // 토큰 유효성 검사 및 처리 로직
+        Claims claims = securityService.validateToken(token);
+
         postService.deletePostNode(id);
         return ResponseEntity.ok("Post Delete");
     }

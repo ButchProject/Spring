@@ -20,25 +20,22 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
             "p.postTitle =  :postTitle," +
             "p.postWhere = :postWhere," +
             "p.postDetail = :postDetail," +
-            "p.postCapacityStudent = :postCapacityStudent," +
-            "p.postCurrentStudent = :postCurrentStudent," +
-            "p.postMoney = :postMoney," +
-            "p.postSaleMoney = :postSaleMoney," +
-            "p.postDay = :postDay " +
+            "p.postBus45 = :postBus45," +
+            "p.postBus25 = :postBus25," +
+            "p.postBus12 = :postBus12," +
+            "p.postCurrentStudent = :postCurrentStudent " +
             "WHERE p.postId = :postId")
     void updatePostEntitiy (@Param("postId") Long postId,
                            @Param("postTitle") String postTitle,
                            @Param("postWhere") String postWhere,
                            @Param("postDetail") String postDetail,
-                           @Param("postCapacityStudent") Long postCapacityStudent,
-                           @Param("postCurrentStudent") Long postCurrentStudent,
-                           @Param("postMoney") Long postMoney,
-                           @Param("postSaleMoney") Long postSaleMoney,
-                           @Param("postDay") String postDay);
+                           @Param("postBus45") Integer postBus45,
+                            @Param("postBus25") Integer postBus25,
+                            @Param("postBus12") Integer postBus12,
+                            @Param("postCurrentStudent") Integer postCurrentStudent
+                           );
 
 
-    @Query ("SELECT p.postTitle, p.postWhere, p.postCapacityStudent, p.postCurrentStudent " +
-            "FROM PostEntity p " +
-            "ORDER BY p.postId DESC")
+    @Query ("SELECT p FROM PostEntity p ORDER BY p.postId DESC")
     List<PostEntity> sortPostListByDesc();
 }
