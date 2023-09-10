@@ -12,10 +12,10 @@ import lombok.ToString;
 @ToString
 public class NodeDTO {
     private Long nodeId;
-    private Long samePostId; // 게시물 아이디
+    private Long sameBoardId; // 게시물 아이디 -> 어떻게 할래?
     private Long nodeNum; // 정류장 번호
     private Double latitude; // 위도
-    private Double longtitude; // 경도
+    private Double longitude; // 경도
     private String nodeName; // 정류장 이름
     private String nodeDetail; // 정류장 세부지역
     private Integer nodeHour; // 정류장 시간
@@ -25,10 +25,10 @@ public class NodeDTO {
         NodeDTO nodeDTO = new NodeDTO();
 
         nodeDTO.setNodeId(nodeEntity.getNodeId());
-        nodeDTO.setSamePostId(nodeEntity.getSamePostId());
+        nodeDTO.setSameBoardId(nodeEntity.getSameBoardId());
         nodeDTO.setNodeNum(nodeEntity.getNodeNum());
         nodeDTO.setLatitude(nodeEntity.getLatitude());
-        nodeDTO.setLongtitude(nodeEntity.getLongtitude());
+        nodeDTO.setLongitude(nodeEntity.getLongitude());
         nodeDTO.setNodeName(nodeEntity.getNodeName());
         nodeDTO.setNodeDetail(nodeEntity.getNodeDetail());
         nodeDTO.setNodeHour(nodeEntity.getNodeHour());
