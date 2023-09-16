@@ -55,8 +55,11 @@ public class BoardService {
             return null;
         }
     }
-    public void boardSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList) { // 게시글 저장
+    public void boardSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList, String writer) { // 게시글 저장
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
+        Optional<MemberEntity> findEmail = memberRepository.findByMemberEmail(writer);
+        boardEntity.setBoardCurrentStudents(findEmail.get().getNumberOfStudents());
+
         boardRepository.save(boardEntity);
         for (NodeDTO nodeDTO : nodeDTOList) {
             NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
