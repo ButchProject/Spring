@@ -11,8 +11,8 @@ import java.util.List;
 
 
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
-//    @Query ("SELECT P FROM PostEntity p WHERE p.postWhere = :postWhere")
-//    List<PostEntity> findSameWhere (@Param("postWhere") String postWhere);
+    @Query("SELECT b FROM BoardEntity b WHERE b.boardCity = :boardCity")
+    List<BoardEntity> findSameWhere (@Param("boardCity") String boardCity);
 
     @Modifying
     @Transactional
@@ -22,8 +22,7 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
             "b.boardCity = :boardCity," +
             "b.boardWhere = :boardWhere," +
             "b.boardDetail = :boardDetail," +
-            "b.boardCurrentMoney = :boardCurrentMoney," +
-            "b.boardSaleMoney = :boardSaleMoney " +
+            "b.boardCurrentStudents = :boardCurrentStudents " +
             "WHERE b.boardId = :boardId")
     void updateBoardEntity (@Param("boardId") Long boardId,
                            @Param("boardTitle") String boardTitle,
@@ -31,8 +30,7 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
                            @Param("boardCity") String boardCity,
                             @Param("boardWhere") String boardWhere,
                             @Param("boardDetail") String boardDetail,
-                           @Param("boardCurrentMoney") Integer boardCurrentMoney,
-                            @Param("boardSaleMoney") Integer boardSaleMoney
+                           @Param("boardCurrentStudents") Integer boardCurrentStudents
                            );
 
 

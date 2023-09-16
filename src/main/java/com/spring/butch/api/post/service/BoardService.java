@@ -1,6 +1,8 @@
 package com.spring.butch.api.post.service;
 
 
+import com.spring.butch.api.member.entity.MemberEntity;
+import com.spring.butch.api.member.repository.MemberRepository;
 import com.spring.butch.api.post.domain.BoardNodeDomain;
 import com.spring.butch.api.post.dto.NodeDTO;
 import com.spring.butch.api.post.dto.BoardDTO;
@@ -10,15 +12,21 @@ import com.spring.butch.api.post.repository.NodeRepository;
 import com.spring.butch.api.post.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class BoardService {
+    private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
     private final NodeRepository nodeRepository;
+    private final PlatformTransactionManager transactionManager;
 
     public List<BoardNodeDomain> boardNodeListAll() { // 게시글 전체 보기 (최신순으로)
         List<BoardEntity> boardEntityList = boardRepository.sortBoardListByDesc(); // 최신순으로 게시글 db가져오기
@@ -48,19 +56,21 @@ public class BoardService {
         }
     }
     public void boardSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList) { // 게시글 저장
-        BoardEntity postEntity = BoardEntity.toBoardEntity(boardDTO);
-        boardRepository.save(postEntity);
+        BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
+        boardRepository.save(boardEntity);
         for (NodeDTO nodeDTO : nodeDTOList) {
             NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
-            nodeEntity.setSameBoardId(postEntity.getBoardId()); // sameBoardId와 boardId를 연결함
+            nodeEntity.setSameBoardId(boardEntity.getBoardId()); // sameBoardId와 boardId를 연결함
             nodeRepository.save(nodeEntity);
         }
     }
 
-    public BoardDTO detailBoard(Long id) { // 게시판 상세보기 (정류장 빼고)
+    public BoardDTO detailBoard(Long id, String email) { // 게시판 상세보기 (정류장 빼고)
         Optional<BoardEntity> owner = boardRepository.findById(id);
-        if (owner.isPresent()) {
-            BoardDTO boardDTO = BoardDTO.toBoardDTO(owner.get());
+        Optional<MemberEntity> owner2 = memberRepository.findByMemberEmail(email);
+        if (owner.isPresent() && owner2.isPresent()) {
+            Integer students = owner2.get().getNumberOfStudents();
+            BoardDTO boardDTO = BoardDTO.toBoardDTODetail(owner.get(), students);
             return boardDTO;
         } else
             return null;
@@ -78,14 +88,14 @@ public class BoardService {
             return null;
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateBoardNode(Long id, BoardDTO boardDTO, List<NodeDTO> nodeDTOList) { // 수정한 게시판 내용 저장하기.
-        BoardEntity postEntity = BoardEntity.toBoardEntity(boardDTO);
-        boardRepository.updateBoardEntity(id, postEntity.getBoardTitle(),
-                postEntity.getBoardState(), postEntity.getBoardCity(), postEntity.getBoardWhere(),
-                postEntity.getBoardDetail(), postEntity.getBoardCurrentMoney(), postEntity.getBoardSaleMoney());
-
+        BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
+        boardRepository.updateBoardEntity(id, boardEntity.getBoardTitle(),
+                boardEntity.getBoardState(), boardEntity.getBoardCity(), boardEntity.getBoardWhere(),
+                boardEntity.getBoardDetail(), boardEntity.getBoardCurrentStudents());
         nodeRepository.deleteNodeEntities(id);
+
         for (NodeDTO nodeDTO : nodeDTOList) {
             NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
             nodeRepository.save(nodeEntity);
@@ -102,4 +112,13 @@ public class BoardService {
     // 즉, postEntity에서는 데이터 행 하나만 삭제
     // nodeEntity에서는 여러 개의 행 삭제
 
+    public List<BoardDTO> searchWantCity(String city) {
+        List<BoardEntity> sameWhereList = boardRepository.findSameWhere(city);
+        List<BoardDTO> boardDTOList = new ArrayList<>();
+        for (BoardEntity sameWhere : sameWhereList) {
+            BoardDTO boardDTO = BoardDTO.toBoardDTO(sameWhere);
+            boardDTOList.add(boardDTO);
+        }
+        return boardDTOList;
+    }
 }
