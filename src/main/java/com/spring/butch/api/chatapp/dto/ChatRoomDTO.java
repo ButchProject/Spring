@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ChatRoom {
-    private String user1;
-    private String user2;
+public class ChatRoomDTO {
     private Integer roomNum;
+    private String otherUserEmail;
 }
