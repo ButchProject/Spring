@@ -18,8 +18,10 @@ public class ProfileController {
 
     @Autowired
     private final MemberService memberService;
+
     @Autowired
     private SecurityService securityService;
+
 
     @GetMapping("/profile")
     public ResponseEntity<MemberDTO> findById(HttpServletRequest request) {
