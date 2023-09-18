@@ -10,11 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface NodeRepository extends JpaRepository<NodeEntity, Long> {
-    @Query("SELECT n FROM NodeEntity n WHERE n.postId = :id")
-    List<NodeEntity> findSamePostIdNode(@Param("id") Long id);
+    @Query("SELECT n FROM NodeEntity n WHERE n.sameBoardId = :id")
+    List<NodeEntity> findSameBoardIdNode(@Param("id") Long id);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM NodeEntity n WHERE n.postId = :id")
+    @Query("DELETE FROM NodeEntity n WHERE n.sameBoardId = :id")
     void deleteNodeEntities(@Param("id") Long id);
+
+
+
 }

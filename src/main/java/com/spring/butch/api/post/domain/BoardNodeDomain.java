@@ -1,7 +1,7 @@
 package com.spring.butch.api.post.domain;
 
-import com.spring.butch.api.post.dto.PostDTO;
 import com.spring.butch.api.post.dto.NodeDTO;
+import com.spring.butch.api.post.dto.BoardDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,12 +10,12 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class PostNodeDomain { // 가져다 사용하는 데이터 사용방식
-        private PostDTO postDTO;
+public class BoardNodeDomain { // 가져다 사용하는 데이터 사용방식
+        private BoardDTO boardDTO;
         private List<NodeDTO> nodeDTOList;
 
-    public PostNodeDomain(PostDTO postDTO, List<NodeDTO> nodeDTOList) {
-        this.postDTO = postDTO;
+    public BoardNodeDomain(BoardDTO boardDTO, List<NodeDTO> nodeDTOList) {
+        this.boardDTO = boardDTO;
         this.nodeDTOList = nodeDTOList;
     }
     // DB에 저장되어있는 방식이 post 구성 DB, node DB 두가지로 구성되어있음.

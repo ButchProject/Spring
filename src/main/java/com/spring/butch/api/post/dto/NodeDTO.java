@@ -11,26 +11,28 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class NodeDTO {
-    // 위도와 경도를 따로 저장해둔다.
     private Long nodeId;
-    private Long postId; // 게시물 아이디
+    private Long sameBoardId; // 게시물 아이디 -> 어떻게 할래?
     private Long nodeNum; // 정류장 번호
     private Double latitude; // 위도
-    private Double longtitude; // 경도
+    private Double longitude; // 경도
     private String nodeName; // 정류장 이름
     private String nodeDetail; // 정류장 세부지역
-    private String nodeTime; // 정류장 출발시간
+    private Integer nodeHour; // 정류장 시간
+    private Integer nodeMinute; // 정류장 분
 
     public static NodeDTO toNodeDTO(NodeEntity nodeEntity){
         NodeDTO nodeDTO = new NodeDTO();
+
         nodeDTO.setNodeId(nodeEntity.getNodeId());
-        nodeDTO.setPostId(nodeEntity.getPostId());
+        nodeDTO.setSameBoardId(nodeEntity.getSameBoardId());
         nodeDTO.setNodeNum(nodeEntity.getNodeNum());
         nodeDTO.setLatitude(nodeEntity.getLatitude());
-        nodeDTO.setLongtitude(nodeEntity.getLongtitude());
+        nodeDTO.setLongitude(nodeEntity.getLongitude());
         nodeDTO.setNodeName(nodeEntity.getNodeName());
         nodeDTO.setNodeDetail(nodeEntity.getNodeDetail());
-        nodeDTO.setNodeTime(nodeEntity.getNodeTime());
+        nodeDTO.setNodeHour(nodeEntity.getNodeHour());
+        nodeDTO.setNodeMinute(nodeEntity.getNodeMinute());
 
         return nodeDTO;
     }
