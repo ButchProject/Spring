@@ -26,7 +26,6 @@ public class ChatController {
     private final ChatRepository chatRepository;
     private final SecurityService securityService;
     private final ChatRoomRepository chatRoomRepository;
-    private final MemberService memberService;
     @CrossOrigin
     @PostMapping("/chat/createRoom")
     public Mono<ChatRoomEntity> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {

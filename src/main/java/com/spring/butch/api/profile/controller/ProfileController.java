@@ -20,8 +20,6 @@ public class ProfileController {
     private final MemberService memberService;
     private final SecurityService securityService;
 
-    @Autowired
-    private SecurityService securityService;
 
     @GetMapping("/profile")
     public ResponseEntity<MemberDTO> findById(HttpServletRequest request) {
