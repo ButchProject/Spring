@@ -2,9 +2,13 @@ package com.spring.butch.api.profile.controller;
 
 import com.spring.butch.api.member.dto.MemberDTO;
 import com.spring.butch.api.member.service.MemberService;
+import com.spring.butch.api.member.service.SecurityService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/profile")
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
 
     private final MemberService memberService;
+    private final SecurityService securityService;
 
     @GetMapping("/{id}") // 토큰을 받아서 findByEmail하는 로직으로 변경해야 함.
     public ResponseEntity<MemberDTO> findById(@PathVariable Long id) {
@@ -36,6 +41,14 @@ public class ProfileController {
     // 토큰 email이랑 db에 저장되어있는 이메일이랑 비교해서 되면 그 email에 해당되는 글 전부
     // postentity 가져오기
     //
+
+    @PostMapping("/addStudent")
+    public ResponseEntity<String> addStudentToBoard(HttpServletRequest request) {
+        String token = securityService.resolveToken(request);
+        Claims claims = securityService.validateToken(token); // 토큰 검사
+
+        return ResponseEntity.ok("ok");
+    }
 
 
 }

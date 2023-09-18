@@ -13,10 +13,7 @@ import com.spring.butch.api.post.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.*;
 
@@ -55,7 +52,7 @@ public class BoardService {
             return null;
         }
     }
-    public void boardSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList, String writer) { // 게시글 저장
+    public void boardNodesSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList, String writer) { // 게시글 저장
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
         Optional<MemberEntity> findEmail = memberRepository.findByMemberEmail(writer);
         boardEntity.setBoardCurrentStudents(findEmail.get().getNumberOfStudents());
@@ -68,13 +65,20 @@ public class BoardService {
         }
     }
 
+    public void onlyNodesSave(List<NodeDTO> nodeDTOList) { // 정류장만 저장하기(게시글을 수정했을 때 정류장 다시 저장)
+        for (NodeDTO nodeDTO : nodeDTOList) {
+            NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
+            nodeRepository.save(nodeEntity);
+        }
+    }
+
+
     public BoardDTO detailBoard(Long id, String email) { // 게시판 상세보기 (정류장 빼고)
         Optional<BoardEntity> owner = boardRepository.findById(id);
         Optional<MemberEntity> owner2 = memberRepository.findByMemberEmail(email);
         if (owner.isPresent() && owner2.isPresent()) {
             Integer students = owner2.get().getNumberOfStudents();
-            BoardDTO boardDTO = BoardDTO.toBoardDTODetail(owner.get(), students);
-            return boardDTO;
+            return BoardDTO.toBoardDTODetail(owner.get(), students);
         } else
             return null;
     }
@@ -91,18 +95,15 @@ public class BoardService {
             return null;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void updateBoardNode(Long id, BoardDTO boardDTO, List<NodeDTO> nodeDTOList) { // 수정한 게시판 내용 저장하기.
+    @Transactional
+    public void updateBoardNode(Long id, BoardDTO boardDTO) { // 수정한 게시판 내용 저장하기.
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
         boardRepository.updateBoardEntity(id, boardEntity.getBoardTitle(),
                 boardEntity.getBoardState(), boardEntity.getBoardCity(), boardEntity.getBoardWhere(),
                 boardEntity.getBoardDetail(), boardEntity.getBoardCurrentStudents());
+
         nodeRepository.deleteNodeEntities(id);
 
-        for (NodeDTO nodeDTO : nodeDTOList) {
-            NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
-            nodeRepository.save(nodeEntity);
-        }
     }
     // DTO를 Entity 형식으로 수정하고, 각 데이터 하나하나를 직접 지정해서 Quary에 대입함
 

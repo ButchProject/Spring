@@ -1,10 +1,8 @@
 package com.spring.butch.api.post.controller;
 
-import com.spring.butch.api.member.dto.MemberDTO;
 import com.spring.butch.api.member.service.SecurityService;
 import com.spring.butch.api.post.dto.NodeDTO;
 import com.spring.butch.api.post.dto.BoardDTO;
-import com.spring.butch.api.post.entity.BoardEntity;
 import com.spring.butch.api.post.service.BoardService;
 import com.spring.butch.api.post.domain.BoardNodeDomain;
 import io.jsonwebtoken.Claims;
@@ -13,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Member;
 import java.util.List;
 
 
@@ -49,7 +46,7 @@ public class BoardController {
         System.out.println("Boardlist save");
         System.out.println("게시물 구성 : " + boardDTO);
         System.out.println("정류장 종류 : " + nodeDTOList); // 저장된 원소 보여주기
-        boardService.boardSave(boardDTO, nodeDTOList, writer); // 저장
+        boardService.boardNodesSave(boardDTO, nodeDTOList, writer); // 저장
 
         return ResponseEntity.ok("Board Save");
     }
@@ -78,7 +75,8 @@ public class BoardController {
         System.out.println("Boardlist update");
         System.out.println("게시물 수정 : " + boardDTO);
         System.out.println("정류장 수정 : " + nodeDTOList);
-        boardService.updateBoardNode(id, boardDTO, nodeDTOList); // 업데이트 로직
+        boardService.updateBoardNode(id, boardDTO); // 업데이트 로직
+        boardService.onlyNodesSave(nodeDTOList);
         // 게시글이 업데이트 되면, 해당 게시글 업로드 날짜 변경됨.
 
         return ResponseEntity.ok("Board Update");
