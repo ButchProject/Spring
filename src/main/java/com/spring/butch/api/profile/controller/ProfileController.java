@@ -18,7 +18,9 @@ public class ProfileController {
 
     @Autowired
     private final MemberService memberService;
-    private final SecurityService securityService;
+
+    @Autowired
+    private SecurityService securityService;
 
 
     @GetMapping("/profile")
@@ -46,19 +48,5 @@ public class ProfileController {
         memberService.update(memberDTO);
         return ResponseEntity.ok().build();
     }
-
-    // 내 게시글 수정하기
-    // 토큰 email이랑 db에 저장되어있는 이메일이랑 비교해서 되면 그 email에 해당되는 글 전부
-    // postentity 가져오기
-    //
-
-    @PostMapping("/addStudent")
-    public ResponseEntity<String> addStudentToBoard(HttpServletRequest request) {
-        String token = securityService.resolveToken(request);
-        Claims claims = securityService.validateToken(token); // 토큰 검사
-
-        return ResponseEntity.ok("ok");
-    }
-
 
 }

@@ -1,6 +1,6 @@
-package com.spring.butch.api.post.entity;
+package com.spring.butch.api.board.entity;
 
-import com.spring.butch.api.post.dto.NodeDTO;
+import com.spring.butch.api.board.dto.NodeDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,21 +14,21 @@ public class NodeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long nodeId;
-    @Column
+    @Column (name = "same_board_id")
     private Long sameBoardId; // 게시물 아이디
-    @Column
+    @Column (name = "node_num")
     private Long nodeNum; // 정류장 번호
-    @Column
+    @Column (name = "latitude")
     private Double latitude; // 위도
-    @Column
+    @Column (name = "longitude")
     private Double longitude; // 경도
-    @Column
+    @Column (name = "node_name")
     private String nodeName; // 정류장 이름
-    @Column
+    @Column (name = "node_detail")
     private String nodeDetail; // 정류장 세부지역
-    @Column
+    @Column (name = "node_hour")
     private Integer nodeHour; // 정류장 시간
-    @Column
+    @Column (name = "node_minute")
     private Integer nodeMinute; // 정류장 분
 
     public static NodeEntity toNodeEntity(NodeDTO nodeDTO){

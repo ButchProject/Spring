@@ -1,6 +1,6 @@
-package com.spring.butch.api.post.repository;
+package com.spring.butch.api.board.repository;
 
-import com.spring.butch.api.post.entity.BoardEntity;
+import com.spring.butch.api.board.entity.BoardEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
