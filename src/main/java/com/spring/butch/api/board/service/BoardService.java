@@ -1,15 +1,15 @@
-package com.spring.butch.api.post.service;
+package com.spring.butch.api.board.service;
 
 
 import com.spring.butch.api.member.entity.MemberEntity;
 import com.spring.butch.api.member.repository.MemberRepository;
-import com.spring.butch.api.post.domain.BoardNodeDomain;
-import com.spring.butch.api.post.dto.NodeDTO;
-import com.spring.butch.api.post.dto.BoardDTO;
-import com.spring.butch.api.post.entity.NodeEntity;
-import com.spring.butch.api.post.entity.BoardEntity;
-import com.spring.butch.api.post.repository.NodeRepository;
-import com.spring.butch.api.post.repository.BoardRepository;
+import com.spring.butch.api.board.domain.BoardNodeDomain;
+import com.spring.butch.api.board.dto.NodeDTO;
+import com.spring.butch.api.board.dto.BoardDTO;
+import com.spring.butch.api.board.entity.NodeEntity;
+import com.spring.butch.api.board.entity.BoardEntity;
+import com.spring.butch.api.board.repository.NodeRepository;
+import com.spring.butch.api.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -124,5 +124,13 @@ public class BoardService {
             boardDTOList.add(boardDTO);
         }
         return boardDTOList;
+    }
+
+    public void addAllStudents(Long id, String email) {
+        Optional<MemberEntity> getStudent = memberRepository.findByMemberEmail(email);
+        Integer students = getStudent.get().getNumberOfStudents();
+
+        Optional<BoardEntity> addBoard = boardRepository.findById(id);
+        addBoard.get().setBoardCurrentStudents(addBoard.get().getBoardCurrentStudents() + students);
     }
 }

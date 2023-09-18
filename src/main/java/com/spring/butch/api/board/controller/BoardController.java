@@ -1,10 +1,10 @@
-package com.spring.butch.api.post.controller;
+package com.spring.butch.api.board.controller;
 
 import com.spring.butch.api.member.service.SecurityService;
-import com.spring.butch.api.post.dto.NodeDTO;
-import com.spring.butch.api.post.dto.BoardDTO;
-import com.spring.butch.api.post.service.BoardService;
-import com.spring.butch.api.post.domain.BoardNodeDomain;
+import com.spring.butch.api.board.dto.NodeDTO;
+import com.spring.butch.api.board.dto.BoardDTO;
+import com.spring.butch.api.board.service.BoardService;
+import com.spring.butch.api.board.domain.BoardNodeDomain;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,6 @@ public class BoardController {
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token); // 토큰 검사
         String writer = claims.getSubject();
-
 
         BoardDTO boardDTO = boardNode.getBoardDTO();
         List<NodeDTO> nodeDTOList = boardNode.getNodeDTOList(); // 게시글, 정류장 나눠담기
@@ -80,6 +79,17 @@ public class BoardController {
         // 게시글이 업데이트 되면, 해당 게시글 업로드 날짜 변경됨.
 
         return ResponseEntity.ok("Board Update");
+    }
+
+    @PostMapping("detailBoard/{id}")
+    public ResponseEntity<String> addStudentBoard(@PathVariable Long id, HttpServletRequest request) {
+        String token = securityService.resolveToken(request);
+        Claims claims = securityService.validateToken(token); // 토큰 검사
+        String email = claims.getSubject(); // 토큰 이메일 따오기
+
+        boardService.addAllStudents(id, email);
+
+        return ResponseEntity.ok("add Student");
     }
 
     @DeleteMapping("/deleteBoard/{id}") // 게시글 삭제하기
