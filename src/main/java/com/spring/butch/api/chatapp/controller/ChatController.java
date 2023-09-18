@@ -1,10 +1,10 @@
 package com.spring.butch.api.chatapp.controller;
 
+import com.spring.butch.api.chatapp.dto.ChatRoom;
 import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.entity.ChatRoomEntity;
 import com.spring.butch.api.chatapp.repository.ChatRepository;
 import com.spring.butch.api.chatapp.repository.ChatRoomRepository;
-import com.spring.butch.api.member.service.MemberService;
 import com.spring.butch.api.member.service.SecurityService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -87,8 +87,12 @@ public class ChatController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Chat> findByRoomNum(@PathVariable Integer roomNum){
+    @GetMapping(value = "/chat/room/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Chat> findByRoomNum(HttpServletRequest request, @PathVariable Integer roomNum){
+        // 토큰 검사
+        String token = securityService.resolveToken(request);
+        Claims claims = securityService.validateToken(token);
+
         return chatRepository.mFindByRoomNum(roomNum)
                 .subscribeOn(Schedulers.boundedElastic());
     }
