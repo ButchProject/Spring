@@ -19,8 +19,6 @@ import reactor.core.scheduler.Schedulers;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -71,29 +69,6 @@ public class ChatController {
                 });
     }
 
-    /*@CrossOrigin
-    @PostMapping("/chat/createRoom")
-    public Mono<ChatRoomEntity> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {
-        // 토큰 검증
-        String token = securityService.resolveToken(request);
-        Claims claims = securityService.validateToken(token);
-
-        // user1 설정 (user2는 Request Body 들어옴)
-        String memberEmail = claims.getSubject();
-        chatRoomEntity.setUser1(memberEmail);
-
-        // chatRoomEntity 구성에 맞게 저장하고 반환
-        return chatRoomRepository.findByUsers(chatRoomEntity.getUser1(), chatRoomEntity.getUser2()) // user1과 user2로 이루어진 채팅방을 찾음
-                .switchIfEmpty( // 없으면 새로운 채팅방을 만듦.
-                        chatRoomRepository.findTopByOrderByRoomNumDesc()
-                                .map(lastchatRoom -> lastchatRoom.getRoomNum() + 1)
-                                .defaultIfEmpty(0) // lastChatRoom 없으면 0으로 초기화
-                                .flatMap(roomNum -> {
-                                    chatRoomEntity.setRoomNum(roomNum);
-                                    return chatRoomRepository.save(chatRoomEntity);
-                                })
-                );
-    }*/
 
     @CrossOrigin
     @GetMapping("/chat/list") // 채팅 목록 보기
@@ -126,21 +101,6 @@ public class ChatController {
                     );
                 })
                 .distinct(ChatRoomDTO::getRoomNum);
-//        // user1, user2 검색
-//        Flux<ChatRoomEntity> senderChats = chatRoomRepository.findByUser1(memberEmail);
-//        Flux<ChatRoomEntity> receiverChats = chatRoomRepository.findByUser2(memberEmail);
-//
-//
-//        return Flux.merge(senderChats, receiverChats)
-//                .filter(chat -> chat.getRoomNum() != null)
-//                .map(chat -> {
-//                    String otherUserEmail = memberEmail.equals(chat.getUser1()) ? chat.getUser2() : chat.getUser1();
-//                    Map<String, Object> roomInfo = new HashMap<>();
-//                    roomInfo.put("roomNumber", chat.getRoomNum());
-//                    roomInfo.put("otherUser", otherUserEmail);
-//                    return roomInfo;
-//                })
-//                .distinct(roomInfo -> (Integer) roomInfo.get("roomNumber"));
     }
 
 
