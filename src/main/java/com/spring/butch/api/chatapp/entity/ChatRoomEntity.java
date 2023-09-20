@@ -13,4 +13,7 @@ public class ChatRoomEntity {
     private String user1;
     private String user2;
     private Integer roomNum;
+    private String user1Academy;
+    private String user2Academy;
+
 }

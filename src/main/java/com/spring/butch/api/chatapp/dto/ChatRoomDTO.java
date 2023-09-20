@@ -7,5 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ChatRoomDTO {
     private Integer roomNum;
+    private String myEmail;
     private String otherUserEmail;
+    private String otherUserAcademyName;
 }

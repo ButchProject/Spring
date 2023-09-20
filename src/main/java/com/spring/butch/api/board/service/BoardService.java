@@ -1,6 +1,7 @@
 package com.spring.butch.api.board.service;
 
 
+import com.spring.butch.api.member.dto.MemberDTO;
 import com.spring.butch.api.member.entity.MemberEntity;
 import com.spring.butch.api.member.repository.MemberRepository;
 import com.spring.butch.api.board.domain.BoardNodeDomain;
@@ -52,6 +53,17 @@ public class BoardService {
             return null;
         }
     }
+    public BoardDTO findById(Long id){
+        Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(id);
+        if (optionalBoardEntity.isPresent()) {
+            return BoardDTO.toBoardDTO(optionalBoardEntity.get());
+            // get 함수를 쓰면 optional로 감싸진 껍데기를 벗길 수 있다.
+        }
+        else {
+            return null;
+        }
+    }
+
     public void boardNodesSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList, String writer) { // 게시글 저장
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
         Optional<MemberEntity> findEmail = memberRepository.findByMemberEmail(writer);

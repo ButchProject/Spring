@@ -1,6 +1,5 @@
 package com.spring.butch.api.chatapp.repository;
 
-import com.spring.butch.api.chatapp.dto.ChatRoom;
 import com.spring.butch.api.chatapp.entity.Chat;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
@@ -17,13 +16,5 @@ public interface ChatRepository extends ReactiveMongoRepository<Chat, String> {
     @Tailable // 채팅방 번호로 찾아서 채팅 (1:N 채팅)
     @Query("{roomNum: ?0}")
     Flux<Chat> mFindByRoomNum(Integer roomNum);
-
-    @Query("{user1: ?0}")
-    Flux<Chat> findByUser1(String user1);
-
-    @Query("{user1: ?0, user2: ?1}")
-    Flux<ChatRoom> findByUser1OrUser2(String user1, String user2);
-
-    Flux<Chat> findByUser2(String memberEmail);
 
 }

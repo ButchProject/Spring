@@ -1,10 +1,14 @@
 package com.spring.butch.api.chatapp.controller;
 
-import com.spring.butch.api.chatapp.dto.ChatRoom;
+
+import com.spring.butch.api.board.service.BoardService;
+import com.spring.butch.api.chatapp.dto.ChatRoomDTO;
 import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.entity.ChatRoomEntity;
 import com.spring.butch.api.chatapp.repository.ChatRepository;
 import com.spring.butch.api.chatapp.repository.ChatRoomRepository;
+import com.spring.butch.api.member.dto.MemberDTO;
+import com.spring.butch.api.member.service.MemberService;
 import com.spring.butch.api.member.service.SecurityService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,8 @@ public class ChatController {
     private final ChatRepository chatRepository;
     private final SecurityService securityService;
     private final ChatRoomRepository chatRoomRepository;
+    private final BoardService boardService;
+    private final MemberService memberService;
     @CrossOrigin
     @PostMapping("/chat/createRoom")
     public Mono<ChatRoomEntity> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {
@@ -38,18 +44,64 @@ public class ChatController {
         chatRoomEntity.setUser1(memberEmail);
 
         // chatRoomEntity 구성에 맞게 저장하고 반환
-        return chatRoomRepository.findByUsers(chatRoomEntity.getUser1(), chatRoomEntity.getUser2())
-                .switchIfEmpty(
+        return chatRoomRepository.findByUsers(chatRoomEntity.getUser1(), chatRoomEntity.getUser2()) // user1과 user2로 이루어진 채팅방을 찾음
+                .switchIfEmpty( // 없으면 새로운 채팅방을 만듦.
                         chatRoomRepository.findTopByOrderByRoomNumDesc()
                                 .map(lastchatRoom -> lastchatRoom.getRoomNum() + 1)
-                                .defaultIfEmpty(0) // lastRoom이 없으면 0으로 초기화
+                                .defaultIfEmpty(0) // lastChatRoom 없으면 0으로 초기화
                                 .flatMap(roomNum -> {
                                     chatRoomEntity.setRoomNum(roomNum);
                                     return chatRoomRepository.save(chatRoomEntity);
                                 })
                 );
     }
+    @CrossOrigin
+    @PostMapping("/chat/createRoom/{id}")
+    public Mono<ChatRoomDTO> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity, @PathVariable Long id) {
+        // 토큰 검증
+        String token = securityService.resolveToken(request);
+        Claims claims = securityService.validateToken(token);
 
+        // user1 설정 (user2는 Request Body 들어옴)
+        String memberEmail = claims.getSubject();
+
+        chatRoomEntity.setUser1(memberEmail);
+
+        // user1 학원 이름 설정
+        MemberDTO member = memberService.findByEmail(memberEmail);
+        String user1AcademyName = member.getAcademyName();
+        chatRoomEntity.setUser1Academy(user1AcademyName);
+
+        return chatRoomRepository.findByUsers(chatRoomEntity.getUser1(), chatRoomEntity.getUser2()) // user1과 user2로 이루어진 채팅방을 찾음
+                .switchIfEmpty( // 없으면 새로운 채팅방을 만듦.
+                        chatRoomRepository.findTopByOrderByRoomNumDesc()
+                                .map(lastchatroom -> lastchatroom.getRoomNum() + 1)
+                                .defaultIfEmpty(0) // lastroomNum이 없으면 0으로 초기화
+                                .flatMap(roomNum -> {
+                                    chatRoomEntity.setRoomNum(roomNum);
+                                    return chatRoomRepository.save(chatRoomEntity);
+                                })
+                )
+                .map(savedChatRow -> {
+                    String otherUserEmail;
+                    String otherUserAcademyName;
+
+                    if (savedChatRow.getUser2().equals(memberEmail)) {
+                        otherUserEmail = savedChatRow.getUser1();
+                        otherUserAcademyName = savedChatRow.getUser1Academy();
+                    } else {
+                        otherUserEmail = savedChatRow.getUser2();
+                        otherUserAcademyName = savedChatRow.getUser2Academy();
+                    }
+
+                    return new ChatRoomDTO(
+                            savedChatRow.getRoomNum(),
+                            memberEmail,
+                            otherUserEmail,
+                            otherUserAcademyName
+                    );
+                });
+    }
     @CrossOrigin
     @GetMapping("/chat/list") // 채팅 목록 보기
     public Flux<Map<String, Object>> getChatRoomNumbersByUser(HttpServletRequest request) {
@@ -79,12 +131,12 @@ public class ChatController {
 
 
     // 1:1 채팅에서 사용
-    @CrossOrigin
-    @GetMapping(value = "sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Chat> getMessage(@PathVariable String sender, @PathVariable String receiver){
-        return chatRepository.mFindByUser1(sender, receiver)
-                .subscribeOn(Schedulers.boundedElastic());
-    }
+//    @CrossOrigin
+//    @GetMapping(value = "sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public Flux<Chat> getMessage(@PathVariable String sender, @PathVariable String receiver){
+//        return chatRepository.mFindByUser1(sender, receiver)
+//                .subscribeOn(Schedulers.boundedElastic());
+//    }
 
     @CrossOrigin
     @GetMapping(value = "/chat/room/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

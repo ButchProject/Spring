@@ -1,6 +1,5 @@
 package com.spring.butch.api.chatapp.repository;
 
-import com.spring.butch.api.chatapp.dto.ChatRoom;
 import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.entity.ChatRoomEntity;
 import org.springframework.data.mongodb.repository.Query;

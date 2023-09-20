@@ -30,8 +30,12 @@ public class AdminController {
     }
 
 
-    @GetMapping("/registerInfo/{id}")
-    public ResponseEntity<MemberDTO> findById(@PathVariable Long id) {
+    @GetMapping("/registerInfo/{id}") // 회원 상세 보기
+    public ResponseEntity<MemberDTO> findById(HttpServletRequest request, @PathVariable Long id) {
+        // 토큰 검증
+        String token = securityService.resolveToken(request);
+        Claims claims = securityService.validateToken(token);
+
         // 뒤에 {id}위치에 쿼리 파라미터로 주면 한 명의 회원 정보만을 받을 수 있음
         MemberDTO memberDTO = memberService.findById(id);
         if (memberDTO != null) {
@@ -40,8 +44,12 @@ public class AdminController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/registerInfo/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    @DeleteMapping("/registerInfo/{id}") // 회원 삭제
+    public ResponseEntity<Void> deleteById(HttpServletRequest request, @PathVariable Long id) {
+        // 토큰 검증
+        String token = securityService.resolveToken(request);
+        Claims claims = securityService.validateToken(token);
+
         memberService.deleteById(id);
         return ResponseEntity.ok().build();
     }
