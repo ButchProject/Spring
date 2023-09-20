@@ -1,7 +1,6 @@
 package com.spring.butch.api.board.service;
 
 
-import com.spring.butch.api.member.dto.MemberDTO;
 import com.spring.butch.api.member.entity.MemberEntity;
 import com.spring.butch.api.member.repository.MemberRepository;
 import com.spring.butch.api.board.domain.BoardNodeDomain;
@@ -24,7 +23,6 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
     private final NodeRepository nodeRepository;
-    private final PlatformTransactionManager transactionManager;
 
     public List<BoardNodeDomain> boardNodeListAll() { // 게시글 전체 보기 (최신순으로)
         List<BoardEntity> boardEntityList = boardRepository.sortBoardListByDesc(); // 최신순으로 게시글 db가져오기

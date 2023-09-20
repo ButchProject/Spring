@@ -30,34 +30,11 @@ public class ChatController {
     private final ChatRepository chatRepository;
     private final SecurityService securityService;
     private final ChatRoomRepository chatRoomRepository;
-    private final BoardService boardService;
     private final MemberService memberService;
+
     @CrossOrigin
     @PostMapping("/chat/createRoom")
-    public Mono<ChatRoomEntity> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {
-        // 토큰 검증
-        String token = securityService.resolveToken(request);
-        Claims claims = securityService.validateToken(token);
-
-        // user1 설정 (user2는 Request Body 들어옴)
-        String memberEmail = claims.getSubject();
-        chatRoomEntity.setUser1(memberEmail);
-
-        // chatRoomEntity 구성에 맞게 저장하고 반환
-        return chatRoomRepository.findByUsers(chatRoomEntity.getUser1(), chatRoomEntity.getUser2()) // user1과 user2로 이루어진 채팅방을 찾음
-                .switchIfEmpty( // 없으면 새로운 채팅방을 만듦.
-                        chatRoomRepository.findTopByOrderByRoomNumDesc()
-                                .map(lastchatRoom -> lastchatRoom.getRoomNum() + 1)
-                                .defaultIfEmpty(0) // lastChatRoom 없으면 0으로 초기화
-                                .flatMap(roomNum -> {
-                                    chatRoomEntity.setRoomNum(roomNum);
-                                    return chatRoomRepository.save(chatRoomEntity);
-                                })
-                );
-    }
-    @CrossOrigin
-    @PostMapping("/chat/createRoom/{id}")
-    public Mono<ChatRoomDTO> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity, @PathVariable Long id) {
+    public Mono<ChatRoomDTO> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {
         // 토큰 검증
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token);
@@ -102,6 +79,31 @@ public class ChatController {
                     );
                 });
     }
+
+    /*@CrossOrigin
+    @PostMapping("/chat/createRoom")
+    public Mono<ChatRoomEntity> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {
+        // 토큰 검증
+        String token = securityService.resolveToken(request);
+        Claims claims = securityService.validateToken(token);
+
+        // user1 설정 (user2는 Request Body 들어옴)
+        String memberEmail = claims.getSubject();
+        chatRoomEntity.setUser1(memberEmail);
+
+        // chatRoomEntity 구성에 맞게 저장하고 반환
+        return chatRoomRepository.findByUsers(chatRoomEntity.getUser1(), chatRoomEntity.getUser2()) // user1과 user2로 이루어진 채팅방을 찾음
+                .switchIfEmpty( // 없으면 새로운 채팅방을 만듦.
+                        chatRoomRepository.findTopByOrderByRoomNumDesc()
+                                .map(lastchatRoom -> lastchatRoom.getRoomNum() + 1)
+                                .defaultIfEmpty(0) // lastChatRoom 없으면 0으로 초기화
+                                .flatMap(roomNum -> {
+                                    chatRoomEntity.setRoomNum(roomNum);
+                                    return chatRoomRepository.save(chatRoomEntity);
+                                })
+                );
+    }*/
+
     @CrossOrigin
     @GetMapping("/chat/list") // 채팅 목록 보기
     public Flux<Map<String, Object>> getChatRoomNumbersByUser(HttpServletRequest request) {
@@ -113,8 +115,8 @@ public class ChatController {
         String memberEmail = claims.getSubject();
 
         // user1, user2 검색
-        Flux<Chat> senderChats = chatRoomRepository.findByUser1(memberEmail);
-        Flux<Chat> receiverChats = chatRoomRepository.findByUser2(memberEmail);
+        Flux<Chat> senderChats = chatRepository.findByUser1(memberEmail);
+        Flux<Chat> receiverChats = chatRepository.findByUser2(memberEmail);
 
 
         return Flux.merge(senderChats, receiverChats)
