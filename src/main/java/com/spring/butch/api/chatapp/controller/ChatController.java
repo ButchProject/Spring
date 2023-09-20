@@ -97,7 +97,7 @@ public class ChatController {
 
     @CrossOrigin
     @GetMapping("/chat/list") // 채팅 목록 보기
-    public Flux<Map<String, Object>> getChatRoomNumbersByUser(HttpServletRequest request) {
+    public Flux<ChatRoomDTO> getChatRoomNumbersByUser(HttpServletRequest request) {
         // 토큰 검사
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token);
@@ -105,21 +105,42 @@ public class ChatController {
         // 토큰에서 이메일 파싱
         String memberEmail = claims.getSubject();
 
-        // user1, user2 검색
-        Flux<Chat> senderChats = chatRoomRepository.findByUser1(memberEmail);
-        Flux<Chat> receiverChats = chatRoomRepository.findByUser2(memberEmail);
-
-
-        return Flux.merge(senderChats, receiverChats)
-                .filter(chat -> chat.getRoomNum() != null)
+        return Flux.concat(chatRoomRepository.findByUser1(memberEmail), chatRoomRepository.findByUser2(memberEmail))
                 .map(chat -> {
-                    String otherUserEmail = memberEmail.equals(chat.getUser1()) ? chat.getUser2() : chat.getUser1();
-                    Map<String, Object> roomInfo = new HashMap<>();
-                    roomInfo.put("roomNumber", chat.getRoomNum());
-                    roomInfo.put("otherUser", otherUserEmail);
-                    return roomInfo;
+                    String otherUserEmail;
+                    String otherAcademyName;
+
+                    if (memberEmail.equals(chat.getUser1())) {
+                        otherUserEmail = chat.getUser2();
+                        otherAcademyName = chat.getUser2Academy();
+                    } else {
+                        otherUserEmail = chat.getUser1();
+                        otherAcademyName = chat.getUser1Academy();
+                    }
+
+                    return new ChatRoomDTO(
+                            chat.getRoomNum(),
+                            memberEmail,
+                            otherUserEmail,
+                            otherAcademyName
+                    );
                 })
-                .distinct(roomInfo -> (Integer) roomInfo.get("roomNumber"));
+                .distinct(ChatRoomDTO::getRoomNum);
+//        // user1, user2 검색
+//        Flux<ChatRoomEntity> senderChats = chatRoomRepository.findByUser1(memberEmail);
+//        Flux<ChatRoomEntity> receiverChats = chatRoomRepository.findByUser2(memberEmail);
+//
+//
+//        return Flux.merge(senderChats, receiverChats)
+//                .filter(chat -> chat.getRoomNum() != null)
+//                .map(chat -> {
+//                    String otherUserEmail = memberEmail.equals(chat.getUser1()) ? chat.getUser2() : chat.getUser1();
+//                    Map<String, Object> roomInfo = new HashMap<>();
+//                    roomInfo.put("roomNumber", chat.getRoomNum());
+//                    roomInfo.put("otherUser", otherUserEmail);
+//                    return roomInfo;
+//                })
+//                .distinct(roomInfo -> (Integer) roomInfo.get("roomNumber"));
     }
 
 
