@@ -14,7 +14,5 @@ public interface ChatRepository extends ReactiveMongoRepository<Chat, String> {
     @Query("{roomNum: ?0}")
     Flux<Chat> mFindByRoomNum(Integer roomNum);
 
-    Flux<Chat> findByUser1(String user1);
 
-    Flux<Chat> findByUser2(String user2);
 }

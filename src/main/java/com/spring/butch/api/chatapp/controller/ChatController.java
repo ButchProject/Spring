@@ -1,7 +1,6 @@
 package com.spring.butch.api.chatapp.controller;
 
 
-import com.spring.butch.api.board.service.BoardService;
 import com.spring.butch.api.chatapp.dto.ChatRoomDTO;
 import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.entity.ChatRoomEntity;
@@ -59,20 +58,12 @@ public class ChatController {
                                     return chatRoomRepository.save(chatRoomEntity);
                                 })
                 )
-                .map(savedChatRow -> {
-                    String otherUserEmail;
-                    String otherUserAcademyName;
-
-                    if (savedChatRow.getUser2().equals(memberEmail)) {
-                        otherUserEmail = savedChatRow.getUser1();
-                        otherUserAcademyName = savedChatRow.getUser1Academy();
-                    } else {
-                        otherUserEmail = savedChatRow.getUser2();
-                        otherUserAcademyName = savedChatRow.getUser2Academy();
-                    }
+                .map(savedChatRoom -> {
+                    String otherUserEmail = chatRoomEntity.getUser2();
+                    String otherUserAcademyName = chatRoomEntity.getUser2Academy();
 
                     return new ChatRoomDTO(
-                            savedChatRow.getRoomNum(),
+                            savedChatRoom.getRoomNum(),
                             memberEmail,
                             otherUserEmail,
                             otherUserAcademyName
@@ -115,8 +106,8 @@ public class ChatController {
         String memberEmail = claims.getSubject();
 
         // user1, user2 검색
-        Flux<Chat> senderChats = chatRepository.findByUser1(memberEmail);
-        Flux<Chat> receiverChats = chatRepository.findByUser2(memberEmail);
+        Flux<Chat> senderChats = chatRoomRepository.findByUser1(memberEmail);
+        Flux<Chat> receiverChats = chatRoomRepository.findByUser2(memberEmail);
 
 
         return Flux.merge(senderChats, receiverChats)

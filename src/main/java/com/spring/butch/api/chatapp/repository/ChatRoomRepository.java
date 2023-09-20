@@ -13,5 +13,7 @@ public interface ChatRoomRepository extends ReactiveMongoRepository<ChatRoomEnti
     @Query("{ $or: [ { 'user1': ?0, 'user2': ?1 }, { 'user1': ?1, 'user2': ?0 } ] }")
     Mono<ChatRoomEntity> findByUsers(String user1, String user2);
 
+    Flux<Chat> findByUser1(String user1);
 
+    Flux<Chat> findByUser2(String user2);
 }
