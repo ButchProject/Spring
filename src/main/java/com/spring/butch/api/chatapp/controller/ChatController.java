@@ -1,9 +1,13 @@
 package com.spring.butch.api.chatapp.controller;
 
+import com.spring.butch.api.board.entity.BoardEntity;
+import com.spring.butch.api.board.repository.BoardRepository;
 import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.entity.ChatRoomEntity;
 import com.spring.butch.api.chatapp.repository.ChatRepository;
 import com.spring.butch.api.chatapp.repository.ChatRoomRepository;
+import com.spring.butch.api.member.entity.MemberEntity;
+import com.spring.butch.api.member.repository.MemberRepository;
 import com.spring.butch.api.member.service.MemberService;
 import com.spring.butch.api.member.service.SecurityService;
 import io.jsonwebtoken.Claims;
@@ -18,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -27,14 +32,16 @@ public class ChatController {
     private final SecurityService securityService;
     private final ChatRoomRepository chatRoomRepository;
     @CrossOrigin
-    @PostMapping("/chat/createRoom")
-    public Mono<ChatRoomEntity> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {
+    @PostMapping("/chat/createRoom/{id}")
+    public Mono<ChatRoomEntity> createChatRoom(@PathVariable Long id, HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {
         // 토큰 검증
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token);
 
         // user1 설정 (user2는 Request Body 들어옴)
         String memberEmail = claims.getSubject();
+
+
         chatRoomEntity.setUser1(memberEmail);
 
         // chatRoomEntity 구성에 맞게 저장하고 반환

@@ -17,6 +17,13 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     @Modifying
     @Transactional
     @Query("UPDATE BoardEntity b SET " +
+            "b.boardCurrentStudents = :boardCurrentStudents " +
+            "WHERE b.boardId = :boardId")
+    void addStudents (@Param("boardId") Long boardId, @Param("boardCurrentStudents") Integer boardCurrentStudents);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE BoardEntity b SET " +
             "b.boardTitle =  :boardTitle," +
             "b.boardState = :boardState," +
             "b.boardCity = :boardCity," +

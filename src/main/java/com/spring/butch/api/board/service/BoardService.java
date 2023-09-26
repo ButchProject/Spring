@@ -65,14 +65,6 @@ public class BoardService {
         }
     }
 
-    public void onlyNodesSave(List<NodeDTO> nodeDTOList) { // 정류장만 저장하기(게시글을 수정했을 때 정류장 다시 저장)
-        for (NodeDTO nodeDTO : nodeDTOList) {
-            NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
-            nodeRepository.save(nodeEntity);
-        }
-    }
-
-
     public BoardDTO detailBoard(Long id, String email) { // 게시판 상세보기 (정류장 빼고)
         Optional<BoardEntity> owner = boardRepository.findById(id);
         Optional<MemberEntity> owner2 = memberRepository.findByMemberEmail(email);
@@ -96,19 +88,25 @@ public class BoardService {
     }
 
     @Transactional
-    public void updateBoardNode(Long id, BoardDTO boardDTO) { // 수정한 게시판 내용 저장하기.
+    public void updateBoardNode(Long id, BoardDTO boardDTO, List<NodeDTO> nodeDTOList) { // 수정한 게시판 내용 저장하기.
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
         boardRepository.updateBoardEntity(id, boardEntity.getBoardTitle(),
                 boardEntity.getBoardState(), boardEntity.getBoardCity(), boardEntity.getBoardWhere(),
                 boardEntity.getBoardDetail(), boardEntity.getBoardCurrentStudents());
 
+        List<NodeEntity> nodeList = new ArrayList<>();
         nodeRepository.deleteNodeEntities(id);
-
+        for (NodeDTO nodeDTO : nodeDTOList) {
+            NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
+            nodeEntity.setSameBoardId(id);
+            nodeList.add(nodeEntity);
+        }
+        nodeRepository.saveAll(nodeList);
     }
     // DTO를 Entity 형식으로 수정하고, 각 데이터 하나하나를 직접 지정해서 Quary에 대입함
 
     @Transactional
-    public void deleteBoardNode(Long id) { // 게시물 삭제하기
+    public void deleteBoardNode(Long id) { // 게시물 + 정류장 삭제하기
         boardRepository.deleteById(id);
         nodeRepository.deleteNodeEntities(id);
     }
@@ -128,9 +126,11 @@ public class BoardService {
 
     public void addAllStudents(Long id, String email) {
         Optional<MemberEntity> getStudent = memberRepository.findByMemberEmail(email);
-        Integer students = getStudent.get().getNumberOfStudents();
-
         Optional<BoardEntity> addBoard = boardRepository.findById(id);
-        addBoard.get().setBoardCurrentStudents(addBoard.get().getBoardCurrentStudents() + students);
+        Integer students = getStudent.get().getNumberOfStudents();
+        Integer allstudents = addBoard.get().getBoardCurrentStudents() + students;
+
+        boardRepository.addStudents(id, allstudents);
     }
+
 }
