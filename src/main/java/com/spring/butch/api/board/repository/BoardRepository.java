@@ -43,4 +43,5 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     @Query ("SELECT b FROM BoardEntity b ORDER BY b.boardId DESC")
     List<BoardEntity> sortBoardListByDesc();
+
 }

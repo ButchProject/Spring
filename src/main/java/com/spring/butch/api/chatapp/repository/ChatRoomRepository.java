@@ -1,6 +1,5 @@
 package com.spring.butch.api.chatapp.repository;
 
-import com.spring.butch.api.chatapp.dto.ChatRoom;
 import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.entity.ChatRoomEntity;
 import org.springframework.data.mongodb.repository.Query;
@@ -13,6 +12,8 @@ public interface ChatRoomRepository extends ReactiveMongoRepository<ChatRoomEnti
     Mono<ChatRoomEntity> findTopByOrderByRoomNumDesc();
     @Query("{ $or: [ { 'user1': ?0, 'user2': ?1 }, { 'user1': ?1, 'user2': ?0 } ] }")
     Mono<ChatRoomEntity> findByUsers(String user1, String user2);
-    Flux<Chat> findByUser1(String user1);
-    Flux<Chat> findByUser2(String user2);
+
+    Flux<ChatRoomEntity> findByUser1(String user1);
+
+    Flux<ChatRoomEntity> findByUser2(String user2);
 }

@@ -10,7 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "chatRoom")
 public class ChatRoomEntity {
     @Id
+    private String id;
     private String user1;
     private String user2;
     private Integer roomNum;
+    private String user1Academy;
+    private String user2Academy;
+
 }
