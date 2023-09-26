@@ -1,14 +1,9 @@
 package com.spring.butch.api.chatapp.controller;
 
-import com.spring.butch.api.board.entity.BoardEntity;
-import com.spring.butch.api.board.repository.BoardRepository;
 import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.entity.ChatRoomEntity;
 import com.spring.butch.api.chatapp.repository.ChatRepository;
 import com.spring.butch.api.chatapp.repository.ChatRoomRepository;
-import com.spring.butch.api.member.entity.MemberEntity;
-import com.spring.butch.api.member.repository.MemberRepository;
-import com.spring.butch.api.member.service.MemberService;
 import com.spring.butch.api.member.service.SecurityService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
