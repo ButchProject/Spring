@@ -6,8 +6,10 @@ import com.spring.butch.api.chatapp.entity.Chat;
 import com.spring.butch.api.chatapp.entity.ChatRoomEntity;
 import com.spring.butch.api.chatapp.repository.ChatRepository;
 import com.spring.butch.api.chatapp.repository.ChatRoomRepository;
+
 import com.spring.butch.api.member.dto.MemberDTO;
 import com.spring.butch.api.member.service.MemberService;
+
 import com.spring.butch.api.member.service.SecurityService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -32,12 +34,14 @@ public class ChatController {
     @CrossOrigin
     @PostMapping("/chat/createRoom")
     public Mono<ChatRoomDTO> createChatRoom(HttpServletRequest request, @RequestBody ChatRoomEntity chatRoomEntity) {
+
         // 토큰 검증
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token);
 
         // user1 설정 (user2는 Request Body 들어옴)
         String memberEmail = claims.getSubject();
+
 
         chatRoomEntity.setUser1(memberEmail);
 

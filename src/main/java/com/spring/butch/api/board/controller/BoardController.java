@@ -21,7 +21,7 @@ public class BoardController {
     private final BoardService boardService;
     private final SecurityService securityService;
 
-    @GetMapping("/Board")
+    @GetMapping("/Board") // 게시글 목록
     public ResponseEntity<List<BoardNodeDomain>> postNodeList(HttpServletRequest request) {
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token); // 토큰 검사
@@ -43,7 +43,7 @@ public class BoardController {
         boardDTO.setBoardWriter(writer); // 토큰에 있는 email 가져와서 DTO에 세팅하기
 
         System.out.println("Boardlist save");
-        System.out.println("게시물 구성 : " + boardDTO);
+        System.out.println("게시물 구성 : " + boardDTO);//
         System.out.println("정류장 종류 : " + nodeDTOList); // 저장된 원소 보여주기
         boardService.boardNodesSave(boardDTO, nodeDTOList, writer); // 저장
 
@@ -74,8 +74,7 @@ public class BoardController {
         System.out.println("Boardlist update");
         System.out.println("게시물 수정 : " + boardDTO);
         System.out.println("정류장 수정 : " + nodeDTOList);
-        boardService.updateBoardNode(id, boardDTO); // 업데이트 로직
-        boardService.onlyNodesSave(nodeDTOList);
+        boardService.updateBoardNode(id, boardDTO, nodeDTOList); // 업데이트 로직
         // 게시글이 업데이트 되면, 해당 게시글 업로드 날짜 변경됨.
 
         return ResponseEntity.ok("Board Update");

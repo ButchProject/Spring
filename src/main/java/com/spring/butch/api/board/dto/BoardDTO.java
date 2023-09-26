@@ -45,6 +45,7 @@ public class BoardDTO {
 
     public static BoardDTO toBoardDTODetail(BoardEntity boardEntity, Integer students) {
         BoardDTO boardDTO = new BoardDTO();
+        Integer temp = students;
 
         boardDTO.setBoardId(boardEntity.getBoardId());
         boardDTO.setBoardTitle(boardEntity.getBoardTitle());
@@ -57,7 +58,9 @@ public class BoardDTO {
 
         boardDTO.BusCount(students); // 내가 가진 학생수로 '혼자' 대여해야 할 버스비를 보여줌.
         boardDTO.setBoardSoloMoney(boardDTO.getBoardBus45(), boardDTO.getBoardBus25(), boardDTO.getBoardBus12());
-        boardDTO.BusCount(students + boardEntity.getBoardCurrentStudents()); // 45, 25, 12인승 버스의 각 수를 set함.
+        boardDTO.setBoardBus45(0); boardDTO.setBoardBus25(0); boardDTO.setBoardBus12(0);
+
+        boardDTO.BusCount(temp + boardEntity.getBoardCurrentStudents()); // 45, 25, 12인승 버스의 각 수를 set함.
         boardDTO.setBoardBusSumMoney(boardDTO.getBoardBus45(), boardDTO.getBoardBus25(), boardDTO.getBoardBus12());
         boardDTO.setBoardBusSaleMoney(students); // 내가 지불 해야하는 버스의 금액
 

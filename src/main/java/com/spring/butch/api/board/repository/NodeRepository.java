@@ -18,6 +18,4 @@ public interface NodeRepository extends JpaRepository<NodeEntity, Long> {
     @Query("DELETE FROM NodeEntity n WHERE n.sameBoardId = :id")
     void deleteNodeEntities(@Param("id") Long id);
 
-
-
 }
