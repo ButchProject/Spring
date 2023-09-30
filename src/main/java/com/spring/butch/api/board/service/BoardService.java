@@ -23,7 +23,6 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
     private final NodeRepository nodeRepository;
-    private final PlatformTransactionManager transactionManager;
 
     public List<BoardNodeDomain> boardNodeListAll() { // 게시글 전체 보기 (최신순으로)
         List<BoardEntity> boardEntityList = boardRepository.sortBoardListByDesc(); // 최신순으로 게시글 구성 db가져오기
@@ -58,6 +57,17 @@ public class BoardService {
             return null;
         }
     }
+    public BoardDTO findById(Long id){
+        Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(id);
+        if (optionalBoardEntity.isPresent()) {
+            return BoardDTO.toBoardDTO(optionalBoardEntity.get());
+            // get 함수를 쓰면 optional로 감싸진 껍데기를 벗길 수 있다.
+        }
+        else {
+            return null;
+        }
+    }
+
     public void boardNodesSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList, String writer) { // 게시글 저장
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
         // 게시글 구성을 entity화 시킴
