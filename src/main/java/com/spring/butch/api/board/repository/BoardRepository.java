@@ -14,6 +14,8 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     @Query("SELECT b FROM BoardEntity b WHERE b.boardCity = :boardCity")
     List<BoardEntity> findSameWhere (@Param("boardCity") String boardCity);
 
+    @Query("SELECT b FROM BoardEntity b Where b.boardWriter = :boardWriter")
+    List<BoardEntity> findMyBoardList(@Param("boardWriter") String boardWriter);
     @Modifying
     @Transactional
     @Query("UPDATE BoardEntity b SET " +

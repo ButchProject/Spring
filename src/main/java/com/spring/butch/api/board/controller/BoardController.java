@@ -63,7 +63,19 @@ public class BoardController {
         return ResponseEntity.ok(boardNodeDomain);
     }
 
-    @PostMapping("/updateBoard/{id}") // 게시글 수정하기, url에 게시글에 따른 id 입력되어있어야함.
+    @GetMapping("updateBoard/{id}") // 게시글 수정 ( 기존데이터 가져오기 )
+    public ResponseEntity<BoardNodeDomain> myBoard(@PathVariable Long id, HttpServletRequest request) {
+        String token = securityService.resolveToken(request);
+        Claims claims = securityService.validateToken(token); // 토큰 검사
+        String email = claims.getSubject();
+
+        BoardDTO detailBoard = boardService.detailBoard(id, email);
+        List<NodeDTO> detailNode = boardService.detailNode(id);
+
+        BoardNodeDomain boardNodeDomain = new BoardNodeDomain(detailBoard, detailNode);
+        return ResponseEntity.ok(boardNodeDomain);
+    }
+    @PostMapping("/updateBoard/{id}") // 게시글 수정하기 ( 수정한 게시글 저장하기 )
     public ResponseEntity<String> postUpdate(@PathVariable Long id, @RequestBody BoardNodeDomain boardNode, HttpServletRequest request) {
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token); // 토큰 검사
@@ -72,21 +84,21 @@ public class BoardController {
         List<NodeDTO> nodeDTOList = boardNode.getNodeDTOList(); // 게시글, 정류장 나누기
 
         System.out.println("Boardlist update");
-        System.out.println("게시물 수정 : " + boardDTO);
-        System.out.println("정류장 수정 : " + nodeDTOList);
+        System.out.println("게시물 수정 : " + boardDTO); // 들어온 데이터 터미널로 확인하기
+        System.out.println("정류장 수정 : " + nodeDTOList); // 들어온 데이터 터미널로 확인하기
         boardService.updateBoardNode(id, boardDTO, nodeDTOList); // 업데이트 로직
         // 게시글이 업데이트 되면, 해당 게시글 업로드 날짜 변경됨.
 
         return ResponseEntity.ok("Board Update");
     }
 
-    @PostMapping("detailBoard/{id}")
+    @PostMapping("detailBoard/{id}/add") // 학생 수 추가하기
     public ResponseEntity<String> addStudentBoard(@PathVariable Long id, HttpServletRequest request) {
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token); // 토큰 검사
         String email = claims.getSubject(); // 토큰 이메일 따오기
 
-        boardService.addAllStudents(id, email);
+        boardService.addAllStudents(id, email); // 학생 더하기 로직
 
         return ResponseEntity.ok("add Student");
     }
@@ -96,7 +108,7 @@ public class BoardController {
         String token = securityService.resolveToken(request);
         Claims claims = securityService.validateToken(token); // 토큰 검사
 
-        boardService.deleteBoardNode(id);
+        boardService.deleteBoardNode(id);// 삭제 로직
         return ResponseEntity.ok("Board Delete");
     }
 
@@ -109,6 +121,7 @@ public class BoardController {
 
         return ResponseEntity.ok(boardDTOList);
     }
+
 }
 
 
