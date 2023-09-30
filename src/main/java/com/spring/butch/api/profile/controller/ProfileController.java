@@ -1,5 +1,7 @@
 package com.spring.butch.api.profile.controller;
 
+import com.spring.butch.api.board.dto.BoardDTO;
+import com.spring.butch.api.board.service.BoardService;
 import com.spring.butch.api.member.dto.MemberDTO;
 import com.spring.butch.api.member.service.MemberService;
 import com.spring.butch.api.member.service.SecurityService;
@@ -10,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -22,17 +27,23 @@ public class ProfileController {
     @Autowired
     private SecurityService securityService;
 
+    @Autowired
+    private final BoardService boardService;
 
     @GetMapping("/profile")
-    public ResponseEntity<MemberDTO> findById(HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> findById(HttpServletRequest request) {
         // "Bearer " 제거
         String token = securityService.resolveToken(request);
         // 토큰 유효성 검사 및 처리 로직
         Claims claims = securityService.validateToken(token);
+        Map<String, Object> response = new HashMap<>();
         String Email = claims.getSubject();
         MemberDTO memberDTO = memberService.findByEmail(Email);
         if (memberDTO != null) {
-            return ResponseEntity.ok(memberDTO);
+            List<BoardDTO> boardDTOS = boardService.myBoardList(Email);
+            response.put("memberDTO", memberDTO);
+            response.put("boardDTOs", boardDTOS);
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.notFound().build();
     }

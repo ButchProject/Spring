@@ -26,25 +26,31 @@ public class BoardService {
     private final PlatformTransactionManager transactionManager;
 
     public List<BoardNodeDomain> boardNodeListAll() { // 게시글 전체 보기 (최신순으로)
-        List<BoardEntity> boardEntityList = boardRepository.sortBoardListByDesc(); // 최신순으로 게시글 db가져오기
+        List<BoardEntity> boardEntityList = boardRepository.sortBoardListByDesc(); // 최신순으로 게시글 구성 db가져오기
         List<BoardNodeDomain> listAll = new ArrayList<>();
+        // 게시글 1이라고 하면, 게시글에 대한 내용과 이에 대한 정류장이 있음
+        // 이런 형태의 게시글 10개가 있다면 그 10개의 게시글을 리스트 안에 넣어서 묶는 과정
 
-        if (boardEntityList != null) {
+        if (boardEntityList != null) { //DB에서 가져온 내용이 없지 않으면 실행
             for(BoardEntity postEntity : boardEntityList) {
                 BoardDTO boardDTO = BoardDTO.toBoardDTO(postEntity);
                 List<NodeDTO> nodeDTOList = new ArrayList<>();
                 List<NodeEntity> nodeEntities = nodeRepository.findSameBoardIdNode(postEntity.getBoardId());
                 // 게시글에 대한 정류장 뽑아서 가져와주기
+                // 가져온 게시글의 구성, 그 중 id를 가지고 정류장을 가져옴.
 
                 for(NodeEntity nodeEntity : nodeEntities) {
                     nodeDTOList.add(NodeDTO.toNodeDTO(nodeEntity));
                 }
+                // 정류장의 entity list를 하나하나 풀어서 DTO list에 넣어둠
                 BoardNodeDomain boardNodeDomain = new BoardNodeDomain();
 
                 boardNodeDomain.setBoardDTO(boardDTO);
                 boardNodeDomain.setNodeDTOList(nodeDTOList);
+                // 게시글 구성과 정류장 n개를 합쳐서 boardNodeDomain에 저장함
 
                 listAll.add(boardNodeDomain);
+                // 게시글 1 완성. 이 과정을 boardEntityList 끝까지 실행함.
             }
             return listAll;
         }
@@ -54,15 +60,19 @@ public class BoardService {
     }
     public void boardNodesSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList, String writer) { // 게시글 저장
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
+        // 게시글 구성을 entity화 시킴
         Optional<MemberEntity> findEmail = memberRepository.findByMemberEmail(writer);
+        // 게시글 저장을 누른 사람이 가진 학생수를 가져옴
         boardEntity.setBoardCurrentStudents(findEmail.get().getNumberOfStudents());
+        // 이를 entity화시킨 게시글에 학생수를 추가함.
+        boardRepository.save(boardEntity); // 저장
 
-        boardRepository.save(boardEntity);
         for (NodeDTO nodeDTO : nodeDTOList) {
-            NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
+            NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO); // 하나를 뽑아서 entity화시킴
             nodeEntity.setSameBoardId(boardEntity.getBoardId()); // sameBoardId와 boardId를 연결함
-            nodeRepository.save(nodeEntity);
+            nodeRepository.save(nodeEntity); // 저장
         }
+        // 정류장 하나하나를 Entity화 시키는 과정
     }
 
     public BoardDTO detailBoard(Long id, String email) { // 게시판 상세보기 (정류장 빼고)
@@ -133,4 +143,18 @@ public class BoardService {
         boardRepository.addStudents(id, allstudents);
     }
 
+    public List<BoardDTO> myBoardList(String email) {
+        List<BoardEntity> myBoardList = boardRepository.findMyBoardList(email);
+        List<BoardDTO> boardDTOS = new ArrayList<>();
+        if (myBoardList != null) {
+            for (BoardEntity myBoard : myBoardList) {
+                BoardDTO boardDTO = BoardDTO.toBoardDTO(myBoard);
+                boardDTOS.add(boardDTO);
+            }
+            return boardDTOS;
+        }
+        else {
+            return null;
+        }
+    }
 }
