@@ -7,10 +7,7 @@ import com.spring.butch.api.member.dto.LoginDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -24,6 +21,7 @@ public class MemberController {
     private final MemberService memberService;
     private final SecurityService securityService;
 
+    @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity<MemberDTO> save(@RequestBody MemberDTO memberDTO) {
         // 이메일 중복 예외처리 해야 함.
@@ -34,6 +32,7 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDTO loginDTO) {
         MemberDTO loginResult = memberService.login(loginDTO);
