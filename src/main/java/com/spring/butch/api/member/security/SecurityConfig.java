@@ -14,19 +14,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // @formatter:off
-        http.cors(withDefaults())
-                .authorizeRequests((authorize) -> authorize.anyRequest().permitAll())
-                .csrf(csrf -> csrf.disable())
-                .httpBasic(withDefaults())
-                .formLogin(withDefaults());
-//        http
-//                .authorizeHttpRequests((authorize) -> authorize
-//                        .anyRequest().permitAll()
-//                )
-//                .cors(cors -> cors.disable())
-//                .csrf(csrf -> csrf.disable())
-//                .httpBasic(withDefaults())
-//                .formLogin(withDefaults());
+        http.cors().and()
+                .authorizeRequests().anyRequest().permitAll().and()
+                .csrf().disable()
+                .httpBasic().and()
+                .formLogin();
         // @formatter:on
         return http.build();
     }
