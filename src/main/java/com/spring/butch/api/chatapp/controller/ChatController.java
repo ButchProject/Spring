@@ -119,9 +119,6 @@ public class ChatController {
     @CrossOrigin
     @GetMapping(value = "/chat/room", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Chat> findByRoomNum(HttpServletRequest request, @RequestParam Integer roomNum){
-        // 토큰 검사
-        String token = securityService.resolveToken(request);
-        Claims claims = securityService.validateToken(token);
         System.out.println("roomNum = " + roomNum);
         return chatRepository.mFindByRoomNum(roomNum)
                 .subscribeOn(Schedulers.boundedElastic());
