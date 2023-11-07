@@ -8,12 +8,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     @Query("SELECT b FROM BoardEntity b WHERE b.boardCity = :boardCity")
     List<BoardEntity> findSameWhere (@Param("boardCity") String boardCity);
 
+    Optional<BoardEntity> findByBoardWriter(String boardWriter);
     @Modifying
     @Transactional
     @Query("UPDATE BoardEntity b SET " +
