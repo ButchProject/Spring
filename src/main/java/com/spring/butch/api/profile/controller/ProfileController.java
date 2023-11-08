@@ -6,10 +6,13 @@ import com.spring.butch.api.member.service.SecurityService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -50,13 +53,19 @@ public class ProfileController {
     }
 
     @PostMapping("/navbar")
-    public ResponseEntity<String> navbar(HttpServletRequest request){
+    public ResponseEntity<Map<String, String>> navbar(HttpServletRequest request){
         String token = securityService.resolveToken(request);
         // 토큰 유효성 검사 및 처리 로직
         Claims claims = securityService.validateToken(token);
+
         String Email = claims.getSubject();
         MemberDTO memberDTO = memberService.findByEmail(Email);
+
         String memberName = memberDTO.getMemberName();
-        return ResponseEntity.ok(memberName);
+
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("memberName", memberName);
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 }
