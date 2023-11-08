@@ -159,7 +159,11 @@ public class BoardService {
         AlreadyEntity alreadyEntity = new AlreadyEntity();
         alreadyEntity.setPostId(id);
         alreadyEntity.setEmail(email);
-        alreadyRepository.save(alreadyEntity);
+
+        Optional<AlreadyEntity> byEmail = alreadyRepository.findByEmail(email);
+        if(byEmail.isEmpty()){
+            alreadyRepository.save(alreadyEntity);
+        }
     }
 
 }
