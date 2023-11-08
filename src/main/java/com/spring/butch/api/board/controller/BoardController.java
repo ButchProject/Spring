@@ -39,7 +39,6 @@ public class BoardController {
 
         BoardDTO boardDTO = boardNode.getBoardDTO();
         List<NodeDTO> nodeDTOList = boardNode.getNodeDTOList(); // 게시글, 정류장 나눠담기
-        boardDTO.setBoardWriter(writer); // 토큰에 있는 email 가져와서 DTO에 세팅하기
 
         System.out.println("Boardlist save");
         System.out.println("게시물 구성 : " + boardDTO);//

@@ -70,8 +70,9 @@ public class BoardService {
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
         Optional<MemberEntity> findEmail = memberRepository.findByMemberEmail(writer);
         boardEntity.setBoardCurrentStudents(findEmail.get().getNumberOfStudents());
-
+        boardEntity.setBoardWriter(findEmail.get().getAcademyName());
         boardRepository.save(boardEntity);
+
         for (NodeDTO nodeDTO : nodeDTOList) {
             NodeEntity nodeEntity = NodeEntity.toNodeEntity(nodeDTO);
             nodeEntity.setSameBoardId(boardEntity.getBoardId()); // sameBoardId와 boardId를 연결함
