@@ -19,6 +19,8 @@ public class BoardEntity {
     private String boardTitle; // 게시글 제목
     @Column (name = "board_writer")
     private String boardWriter; // 게시글 작성자
+    @Column (name = "board_academy")
+    private String boardAcademy; // 게시글 작성 학원명
     @Column (name = "board_state")
     private String boardState; // 게시글 지역(도)
     @Column (name = "board_city")
@@ -36,6 +38,7 @@ public class BoardEntity {
 
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+        boardEntity.setBoardAcademy(boardEntity.getBoardAcademy());
         boardEntity.setBoardState(boardDTO.getBoardState());
         boardEntity.setBoardCity(boardDTO.getBoardCity());
         boardEntity.setBoardWhere(boardDTO.getBoardWhere());
