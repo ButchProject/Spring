@@ -75,7 +75,7 @@ public class ChatController {
 
 
     @CrossOrigin
-    @GetMapping("/chat/list") // 채팅 목록 보기
+    @GetMapping(value = "/chat/list", produces = MediaType.TEXT_EVENT_STREAM_VALUE) // 채팅 목록 보기
     public Flux<ChatRoomDTO> getChatRoomNumbersByUser(HttpServletRequest request) {
         // 토큰 검사
         String token = securityService.resolveToken(request);

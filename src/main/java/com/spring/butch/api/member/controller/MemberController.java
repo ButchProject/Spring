@@ -25,8 +25,6 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<MemberDTO> save(@RequestBody MemberDTO memberDTO) {
         // 이메일 중복 예외처리 해야 함.
-        System.out.println("MemberController.save");
-        System.out.println("memberDTO = " + memberDTO);
         memberService.save(memberDTO);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -41,8 +39,8 @@ public class MemberController {
             String subject = loginDTO.getMemberEmail();
             String token = securityService.createToken(subject, (60*1000*60)); // 1시간으로 설정
 
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("memberEmail", subject);
+//            Map<String, Object> claims = new HashMap<>();
+//            claims.put("memberEmail", subject);
 
 
             Map<String, Object> map = new LinkedHashMap<>();

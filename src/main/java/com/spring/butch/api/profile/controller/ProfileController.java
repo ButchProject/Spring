@@ -49,4 +49,14 @@ public class ProfileController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/navbar")
+    public ResponseEntity<String> navbar(HttpServletRequest request){
+        String token = securityService.resolveToken(request);
+        // 토큰 유효성 검사 및 처리 로직
+        Claims claims = securityService.validateToken(token);
+        String Email = claims.getSubject();
+        MemberDTO memberDTO = memberService.findByEmail(Email);
+        String memberName = memberDTO.getMemberName();
+        return ResponseEntity.ok(memberName);
+    }
 }

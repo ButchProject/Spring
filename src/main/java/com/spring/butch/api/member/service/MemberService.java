@@ -77,7 +77,6 @@ public class MemberService {
         else {
             return null;
         }
-
     }
 
 
@@ -90,7 +89,6 @@ public class MemberService {
         else {
             return null;
         }
-
     }
 
 

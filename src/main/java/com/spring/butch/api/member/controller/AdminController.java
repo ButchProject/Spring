@@ -53,4 +53,5 @@ public class AdminController {
         memberService.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
 }
