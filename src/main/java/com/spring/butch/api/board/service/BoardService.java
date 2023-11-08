@@ -69,8 +69,9 @@ public class BoardService {
     public void boardNodesSave(BoardDTO boardDTO, List<NodeDTO> nodeDTOList, String writer) { // 게시글 저장
         BoardEntity boardEntity = BoardEntity.toBoardEntity(boardDTO);
         Optional<MemberEntity> findEmail = memberRepository.findByMemberEmail(writer);
+        boardEntity.setBoardWriter(findEmail.get().getMemberEmail());
         boardEntity.setBoardCurrentStudents(findEmail.get().getNumberOfStudents());
-        boardEntity.setBoardWriter(findEmail.get().getAcademyName());
+        boardEntity.setBoardAcademy(findEmail.get().getAcademyName());
         boardRepository.save(boardEntity);
 
         for (NodeDTO nodeDTO : nodeDTOList) {

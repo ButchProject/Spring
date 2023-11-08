@@ -14,6 +14,7 @@ public class BoardDTO {
     private Long boardId;
     private String boardTitle; // 게시글 제목
     private String boardWriter; // 게시글 작성자
+    private String boardAcademy;
     private String boardState; // 게시글 지역(도)
     private String boardCity; // 게시글 지역(시)
     private String boardWhere; // 게시글 지역(구)
@@ -34,6 +35,7 @@ public class BoardDTO {
         boardDTO.setBoardId(boardEntity.getBoardId());
         boardDTO.setBoardTitle(boardEntity.getBoardTitle());
         boardDTO.setBoardWriter(boardEntity.getBoardWriter());
+        boardDTO.setBoardAcademy(boardEntity.getBoardAcademy());
         boardDTO.setBoardState(boardEntity.getBoardState());
         boardDTO.setBoardCity(boardEntity.getBoardCity());
         boardDTO.setBoardWhere(boardEntity.getBoardWhere());
@@ -50,6 +52,7 @@ public class BoardDTO {
         boardDTO.setBoardId(boardEntity.getBoardId());
         boardDTO.setBoardTitle(boardEntity.getBoardTitle());
         boardDTO.setBoardWriter(boardEntity.getBoardWriter());
+        boardDTO.setBoardAcademy(boardEntity.getBoardAcademy());
         boardDTO.setBoardState(boardEntity.getBoardState());
         boardDTO.setBoardCity(boardEntity.getBoardCity());
         boardDTO.setBoardWhere(boardEntity.getBoardWhere());
